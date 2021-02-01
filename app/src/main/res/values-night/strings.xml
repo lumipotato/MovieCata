@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="movie">Movie</string>
+    <string name="series">Series</string>
+    <string name="title">Title</string>
+    <string name="description_movie">Movie Description</string>
+    <string name="description">Description</string>
+</resources>
