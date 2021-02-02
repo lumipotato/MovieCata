@@ -9,11 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieCata">
-        <activity android:name=".ui.detail.DetailSeriesActivity"
-            android:theme="@style/Theme.MovieCata.NoActionBar"/>
-        <activity android:name=".ui.detail.DetailMovieActivity"
-            android:theme="@style/Theme.MovieCata.NoActionBar"/>
-        <activity android:name=".ui.home.HomeActivity">
+        <activity
+            android:name=".ui.detail.DetailSeriesActivity"
+            android:theme="@style/Theme.MovieCata.NoActionBar"
+            android:parentActivityName=".ui.home.HomeActivity"/>
+        <activity
+            android:name=".ui.detail.DetailMovieActivity"
+            android:theme="@style/Theme.MovieCata.NoActionBar"
+            android:parentActivityName=".ui.home.HomeActivity"/>
+        <activity android:name=".ui.home.HomeActivity" />
+        <activity android:name=".ui.home.SplashActivity"
+            android:theme="@style/Theme.MovieCata.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

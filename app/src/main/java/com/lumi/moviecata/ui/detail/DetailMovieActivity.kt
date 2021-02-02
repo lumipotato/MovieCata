@@ -27,8 +27,6 @@ class DetailMovieActivity : AppCompatActivity() {
 
         setContentView(activityDetailShowsBinding.root)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         val extras = intent.extras
         if (extras != null) {
             val movieId = extras.getString(EXTRA_MOVIE)

@@ -27,8 +27,6 @@ class DetailSeriesActivity : AppCompatActivity() {
 
         setContentView(activityDetailShowsBinding.root)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         val extras = intent.extras
         if (extras != null) {
             val seriesId = extras.getString(EXTRA_SERIES)
