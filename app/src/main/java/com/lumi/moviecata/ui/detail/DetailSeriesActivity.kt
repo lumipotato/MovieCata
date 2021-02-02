@@ -1,20 +1,20 @@
 package com.lumi.moviecata.ui.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.MovieEntity
+import com.lumi.moviecata.data.SeriesEntity
 import com.lumi.moviecata.databinding.ActivityDetailMovieBinding
 import com.lumi.moviecata.databinding.ContentDetailMovieBinding
 import com.lumi.moviecata.utils.DataDummy
 
-class DetailMovieActivity : AppCompatActivity() {
+class DetailSeriesActivity : AppCompatActivity() {
 
     companion object {
-        const val EXTRA_MOVIE = "extra_movie"
+        const val EXTRA_SERIES = "extra_series"
     }
 
     private lateinit var detailContentBinding: ContentDetailMovieBinding
@@ -30,23 +30,23 @@ class DetailMovieActivity : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
-            val movieId = extras.getString(EXTRA_MOVIE)
-            if (movieId != null) {
-                for (movie in DataDummy.generateDummyMovies()) {
-                    if (movie.movieId == movieId) {
-                        populateMovie(movie)
+            val seriesId = extras.getString(EXTRA_SERIES)
+            if (seriesId != null) {
+                for (series in DataDummy.generateDummySeries()) {
+                    if (series.seriesId == seriesId) {
+                        populateSeries(series)
                     }
                 }
             }
         }
 
     }
-    private fun populateMovie(movieEntity: MovieEntity) {
-        detailContentBinding.textTitle.text = movieEntity.title
-        detailContentBinding.textDescription.text = movieEntity.description
+    private fun populateSeries(seriesEntity: SeriesEntity) {
+        detailContentBinding.textTitle.text = seriesEntity.title
+        detailContentBinding.textDescription.text = seriesEntity.description
 
         Glide.with(this)
-                .load(movieEntity.imagePath)
+                .load(seriesEntity.imagePath)
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))

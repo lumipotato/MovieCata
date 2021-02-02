@@ -9,7 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.SeriesEntity
 import com.lumi.moviecata.databinding.MovieItemsBinding
-import com.lumi.moviecata.ui.detail.DetailMovieActivity
+import com.lumi.moviecata.ui.detail.DetailSeriesActivity
 import java.util.ArrayList
 
 class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
@@ -39,8 +39,8 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
             with(binding) {
                 tvItemTitle.text = series.title
                 itemView.setOnClickListener {
-                    val intent = Intent(itemView.context, DetailMovieActivity::class.java)
-                    intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, series.seriesId)
+                    val intent = Intent(itemView.context, DetailSeriesActivity::class.java)
+                    intent.putExtra(DetailSeriesActivity.EXTRA_SERIES, series.seriesId)
                     itemView.context.startActivity(intent)
                 }
                 Glide.with(itemView.context)
