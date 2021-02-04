@@ -31,8 +31,8 @@ class DetailSeriesActivity : AppCompatActivity() {
         if (extras != null) {
             val seriesId = extras.getString(EXTRA_SERIES)
             if (seriesId != null) {
-                val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[SeriesViewModel::class.java]
-                val series = viewModel.getSeries()
+                val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailSeriesViewModel::class.java]
+                val series = viewModel.getDetailSeries()
                 for (serie in series) {
                     if (serie.seriesId == seriesId) {
                         populateSeries(serie)

@@ -31,8 +31,8 @@ class DetailMovieActivity : AppCompatActivity() {
         if (extras != null) {
             val movieId = extras.getString(EXTRA_MOVIE)
             if (movieId != null) {
-                val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieViewModel::class.java]
-                val movies = viewModel.getMovies()
+                val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailMovieViewModel::class.java]
+                val movies = viewModel.getDetailMovies()
                 for (movie in movies) {
                     if (movie.movieId == movieId) {
                         populateMovie(movie)
