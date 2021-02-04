@@ -13,7 +13,7 @@ class SeriesViewModelTest {
     }
 
     @Test
-    fun getCourses() {
+    fun getSeries() {
         val movieEntities = viewModel.getSeries()
         Assert.assertNotNull(movieEntities)
         Assert.assertEquals(10, movieEntities.size)

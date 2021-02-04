@@ -10,7 +10,6 @@ import com.lumi.moviecata.R
 import com.lumi.moviecata.data.SeriesEntity
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
 import com.lumi.moviecata.databinding.ContentDetailShowsBinding
-import com.lumi.moviecata.ui.series.SeriesViewModel
 
 class DetailSeriesActivity : AppCompatActivity() {
 
