@@ -1,5 +1,6 @@
 package com.lumi.moviecata.ui.movie
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lumi.moviecata.data.MovieEntity
 import com.lumi.moviecata.databinding.FragmentMovieBinding
+import com.lumi.moviecata.ui.detail.DetailMovieActivity
 
 class MovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
@@ -25,14 +28,22 @@ class MovieFragment : Fragment() {
             val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieViewModel::class.java]
             val movies = viewModel.getMovies()
 
-            val academyAdapter = MovieAdapter()
-            academyAdapter.setMovies(movies)
+            val movieAdapter = MovieAdapter()
+            movieAdapter.setMovies(movies)
 
             with(fragmentMovieBinding.rvMovie) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
-                adapter = academyAdapter
+                adapter = movieAdapter
             }
+
+            movieAdapter.setOnItemClickCallback(object : MovieAdapter.OnItemClickCallback {
+                override fun onItemClicked(data: MovieEntity) {
+                    val moveIntent = Intent(requireActivity(), DetailMovieActivity::class.java)
+                    moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.movieId)
+                    startActivity(moveIntent)
+                }
+            })
         }
     }
 }

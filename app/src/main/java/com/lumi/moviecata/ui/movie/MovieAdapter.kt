@@ -1,6 +1,5 @@
 package com.lumi.moviecata.ui.movie
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,11 +8,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.MovieEntity
 import com.lumi.moviecata.databinding.MovieItemsBinding
-import com.lumi.moviecata.ui.detail.DetailMovieActivity
-import java.util.ArrayList
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+    private var onItemClickCallback: OnItemClickCallback? = null
     private var listMovies = ArrayList<MovieEntity>()
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     fun setMovies(movies: List<MovieEntity>?) {
         if (movies == null) return
@@ -27,29 +29,28 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movies = listMovies[position]
-        holder.bind(movies)
+        holder.bind(listMovies[position])
     }
 
     override fun getItemCount(): Int = listMovies.size
 
-
-    class MovieViewHolder(private val binding: MovieItemsBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MovieViewHolder(private val binding: MovieItemsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieEntity) {
             with(binding) {
+
                 tvItemTitle.text = movie.title
-                itemView.setOnClickListener {
-                    val intent = Intent(itemView.context, DetailMovieActivity::class.java)
-                    intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, movie.movieId)
-                    itemView.context.startActivity(intent)
-                }
                 Glide.with(itemView.context)
                     .load(movie.imagePath)
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))
                     .into(imgPoster)
+
+                itemView.setOnClickListener { onItemClickCallback?.onItemClicked(movie) }
             }
         }
+    }
+    interface OnItemClickCallback {
+        fun onItemClicked(data: MovieEntity)
     }
 }
