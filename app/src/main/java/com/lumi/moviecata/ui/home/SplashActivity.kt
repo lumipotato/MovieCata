@@ -8,6 +8,8 @@ import android.os.Looper
 import com.lumi.moviecata.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
+    private val waitTime: Long = 2000
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val activitySplashBinding = ActivitySplashBinding.inflate(layoutInflater)
@@ -16,6 +18,6 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed(
             {startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
                 finish()
-            },2000)
+            },waitTime)
     }
 }

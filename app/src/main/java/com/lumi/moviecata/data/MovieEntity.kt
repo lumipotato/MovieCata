@@ -4,5 +4,5 @@ data class MovieEntity (
     var movieId: String,
     var title: String,
     var description: String,
-    var imagePath: Int
+    var imagePath: String
 )

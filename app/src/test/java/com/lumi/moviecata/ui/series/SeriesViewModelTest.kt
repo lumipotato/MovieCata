@@ -1,5 +1,6 @@
 package com.lumi.moviecata.ui.series
 
+import com.lumi.moviecata.viewmodel.SeriesViewModel
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

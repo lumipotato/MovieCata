@@ -7,9 +7,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.SeriesEntity
+import com.lumi.moviecata.data.source.remote.response.SeriesItem
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
 import com.lumi.moviecata.databinding.ContentDetailShowsBinding
+import com.lumi.moviecata.viewmodel.SeriesViewModel
+import com.lumi.moviecata.viewmodel.ViewModelFactory
 
 class DetailSeriesActivity : AppCompatActivity() {
 
@@ -18,6 +20,7 @@ class DetailSeriesActivity : AppCompatActivity() {
     }
 
     private lateinit var detailContentBinding: ContentDetailShowsBinding
+    private lateinit var seriesViewModel: SeriesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,27 +29,26 @@ class DetailSeriesActivity : AppCompatActivity() {
 
         setContentView(activityDetailShowsBinding.root)
 
+        val factory = ViewModelFactory.getInstance()
+        seriesViewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+
         val extras = intent.extras
-        if (extras != null) {
-            val seriesId = extras.getString(EXTRA_SERIES)
-            if (seriesId != null) {
-                val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailSeriesViewModel::class.java]
-                val series = viewModel.getDetailSeries()
-                for (serie in series) {
-                    if (serie.seriesId == seriesId) {
-                        populateSeries(serie)
-                    }
+        val seriesId = extras?.getString(EXTRA_SERIES)
+        if (seriesId != null) {
+            seriesViewModel.getSeriesDetail(seriesId).observe(this) { detail ->
+                if (detail != null) {
+                    populateSeries(detail)
                 }
             }
         }
 
     }
-    private fun populateSeries(seriesEntity: SeriesEntity) {
-        detailContentBinding.textTitle.text = seriesEntity.title
-        detailContentBinding.textDescription.text = seriesEntity.description
+    private fun populateSeries(seriesItem: SeriesItem) {
+        detailContentBinding.textTitle.text = seriesItem.name
+        detailContentBinding.textDescription.text = seriesItem.overview
 
         Glide.with(this)
-                .load(seriesEntity.imagePath)
+                .load(seriesItem.posterPath)
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))

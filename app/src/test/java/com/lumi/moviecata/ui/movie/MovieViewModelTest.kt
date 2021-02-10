@@ -1,6 +1,7 @@
 package com.lumi.moviecata.ui.movie
 
 
+import com.lumi.moviecata.viewmodel.MovieViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

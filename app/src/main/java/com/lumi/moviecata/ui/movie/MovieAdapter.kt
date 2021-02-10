@@ -6,22 +6,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.MovieEntity
+import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.databinding.MovieItemsBinding
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private var onItemClickCallback: OnItemClickCallback? = null
-    private var listMovies = ArrayList<MovieEntity>()
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setMovies(movies: List<MovieEntity>?) {
-        if (movies == null) return
-        this.listMovies.clear()
-        this.listMovies.addAll(movies)
-    }
+    var listMovies = ArrayList<MovieItem>()
+        set(movie) {
+            this.listMovies.clear()
+            this.listMovies.addAll(movie)
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val movieItemsBinding = MovieItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -35,12 +35,12 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     override fun getItemCount(): Int = listMovies.size
 
     inner class MovieViewHolder(private val binding: MovieItemsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieEntity) {
+        fun bind(movie: MovieItem) {
             with(binding) {
 
                 tvItemTitle.text = movie.title
                 Glide.with(itemView.context)
-                    .load(movie.imagePath)
+                    .load(movie.posterPath)
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))
@@ -51,6 +51,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
         }
     }
     interface OnItemClickCallback {
-        fun onItemClicked(data: MovieEntity)
+        fun onItemClicked(data: MovieItem)
     }
 }

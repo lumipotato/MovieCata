@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lumi.moviecata.data.MovieEntity
+import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.databinding.FragmentMovieBinding
 import com.lumi.moviecata.ui.detail.DetailMovieActivity
+import com.lumi.moviecata.viewmodel.MovieViewModel
+import com.lumi.moviecata.viewmodel.ViewModelFactory
 
 class MovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
+    private lateinit var adapter: MovieAdapter
+    private lateinit var movieViewModel: MovieViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -25,22 +29,27 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieViewModel::class.java]
-            val movies = viewModel.getMovies()
+            val factory = ViewModelFactory.getInstance()
 
-            val movieAdapter = MovieAdapter()
-            movieAdapter.setMovies(movies)
+            movieViewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
+            activity?.let {
+                movieViewModel.getMovie().observe(it, { movie ->
+                    if (movie != null) {
+                        adapter.listMovies = movie as ArrayList<MovieItem>
+                    }
+                })
+            }
 
             with(fragmentMovieBinding.rvMovie) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
-                adapter = movieAdapter
+                adapter = MovieAdapter()
             }
 
-            movieAdapter.setOnItemClickCallback(object : MovieAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: MovieEntity) {
+            adapter.setOnItemClickCallback(object : MovieAdapter.OnItemClickCallback {
+                override fun onItemClicked(data: MovieItem) {
                     val moveIntent = Intent(requireActivity(), DetailMovieActivity::class.java)
-                    moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.movieId)
+                    moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.id)
                     startActivity(moveIntent)
                 }
             })

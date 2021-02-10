@@ -4,5 +4,5 @@ class SeriesEntity (
         var seriesId: String,
         var title: String,
         var description: String,
-        var imagePath: Int
+        var imagePath: String
 )

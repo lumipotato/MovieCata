@@ -7,9 +7,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.MovieEntity
+import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
 import com.lumi.moviecata.databinding.ContentDetailShowsBinding
+import com.lumi.moviecata.viewmodel.MovieViewModel
+import com.lumi.moviecata.viewmodel.ViewModelFactory
 
 class DetailMovieActivity : AppCompatActivity() {
 
@@ -18,6 +20,7 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private lateinit var detailContentBinding: ContentDetailShowsBinding
+    private lateinit var movieViewModel: MovieViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,27 +29,26 @@ class DetailMovieActivity : AppCompatActivity() {
 
         setContentView(activityDetailShowsBinding.root)
 
+        val factory = ViewModelFactory.getInstance()
+        movieViewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
+
         val extras = intent.extras
-        if (extras != null) {
-            val movieId = extras.getString(EXTRA_MOVIE)
-            if (movieId != null) {
-                val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailMovieViewModel::class.java]
-                val movies = viewModel.getDetailMovies()
-                for (movie in movies) {
-                    if (movie.movieId == movieId) {
-                        populateMovie(movie)
-                    }
+        val movieId = extras?.getString(EXTRA_MOVIE)
+        if (movieId != null) {
+            movieViewModel.getMovieDetail(movieId).observe(this) { detail ->
+                if (detail != null) {
+                    populateMovie(detail)
                 }
             }
         }
 
     }
-    private fun populateMovie(movieEntity: MovieEntity) {
-        detailContentBinding.textTitle.text = movieEntity.title
-        detailContentBinding.textDescription.text = movieEntity.description
+    private fun populateMovie(movieItem: MovieItem) {
+        detailContentBinding.textTitle.text = movieItem.title
+        detailContentBinding.textDescription.text = movieItem.overview
 
         Glide.with(this)
-                .load(movieEntity.imagePath)
+                .load(movieItem.posterPath)
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))
