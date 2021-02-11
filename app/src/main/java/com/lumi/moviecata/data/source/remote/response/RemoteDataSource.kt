@@ -83,11 +83,11 @@ class RemoteDataSource {
         )
     }
 
-    fun getSeriesDetail(tvId: String,getTvShowDetailCallback: GetSeriesDetailCallback){
+    fun getSeriesDetail(seriesId: String, getTvShowDetailCallback: GetSeriesDetailCallback){
         EspressoIdlingResource.increment()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            request.getSeriesDetail(tvId,BuildConfig.API_KEY).enqueue(object : Callback<SeriesItem> {
+            request.getSeriesDetail(seriesId,BuildConfig.API_KEY).enqueue(object : Callback<SeriesItem> {
                 override fun onFailure(call: Call<SeriesItem>, t: Throwable) {
                     Log.d("error",t.toString())
                 }

@@ -1,8 +1,6 @@
 package com.lumi.moviecata.data.source
 
 import androidx.lifecycle.LiveData
-import com.lumi.moviecata.data.MovieEntity
-import com.lumi.moviecata.data.SeriesEntity
 import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.data.source.remote.response.SeriesItem
 

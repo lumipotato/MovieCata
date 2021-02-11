@@ -28,6 +28,20 @@ class SeriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentSeriesBinding.rvSeries.setHasFixedSize(true)
+        adapter = SeriesAdapter()
+        adapter.notifyDataSetChanged()
+        fragmentSeriesBinding.rvSeries.layoutManager = LinearLayoutManager(context)
+        fragmentSeriesBinding.rvSeries.adapter = adapter
+
+        adapter.setOnItemClickCallback(object : SeriesAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: SeriesItem) {
+                val moveIntent = Intent(requireActivity(), DetailSeriesActivity::class.java)
+                moveIntent.putExtra(DetailSeriesActivity.EXTRA_SERIES, data.id.toString())
+                startActivity(moveIntent)
+            }
+        })
+
         if (activity != null) {
             val factory = ViewModelFactory.getInstance()
 
@@ -39,20 +53,6 @@ class SeriesFragment : Fragment() {
                     }
                 })
             }
-
-            with(fragmentSeriesBinding.rvSeries) {
-                layoutManager = LinearLayoutManager(context)
-                setHasFixedSize(true)
-                adapter = SeriesAdapter()
-            }
-
-            adapter.setOnItemClickCallback(object : SeriesAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: SeriesItem) {
-                    val moveIntent = Intent(requireActivity(), DetailSeriesActivity::class.java)
-                    moveIntent.putExtra(DetailSeriesActivity.EXTRA_SERIES, data.id)
-                    startActivity(moveIntent)
-                }
-            })
         }
     }
 }

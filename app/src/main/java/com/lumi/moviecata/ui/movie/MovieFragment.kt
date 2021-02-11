@@ -28,6 +28,20 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentMovieBinding.rvMovie.setHasFixedSize(true)
+        adapter = MovieAdapter()
+        adapter.notifyDataSetChanged()
+        fragmentMovieBinding.rvMovie.layoutManager = LinearLayoutManager(context)
+        fragmentMovieBinding.rvMovie.adapter = adapter
+
+        adapter.setOnItemClickCallback(object : MovieAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: MovieItem) {
+                val moveIntent = Intent(requireActivity(), DetailMovieActivity::class.java)
+                moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.id.toString())
+                startActivity(moveIntent)
+            }
+        })
+
         if (activity != null) {
             val factory = ViewModelFactory.getInstance()
 
@@ -40,19 +54,6 @@ class MovieFragment : Fragment() {
                 })
             }
 
-            with(fragmentMovieBinding.rvMovie) {
-                layoutManager = LinearLayoutManager(context)
-                setHasFixedSize(true)
-                adapter = MovieAdapter()
-            }
-
-            adapter.setOnItemClickCallback(object : MovieAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: MovieItem) {
-                    val moveIntent = Intent(requireActivity(), DetailMovieActivity::class.java)
-                    moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.id)
-                    startActivity(moveIntent)
-                }
-            })
         }
     }
 }
