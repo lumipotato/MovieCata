@@ -8,5 +8,5 @@ import com.lumi.moviecata.data.source.remote.response.SeriesItem
 class SeriesViewModel(private val movieCataRepository: MovieCataRepository) : ViewModel() {
 
     fun getSeries() : LiveData<List<SeriesItem>> = movieCataRepository.getSeries()
-    fun getSeriesDetail(seriesId: String) : LiveData<SeriesItem> = movieCataRepository.getSeriesDetail(seriesId)
+    fun getSeriesDetail(seriesId: Int) : LiveData<SeriesItem> = movieCataRepository.getSeriesDetail(seriesId)
 }

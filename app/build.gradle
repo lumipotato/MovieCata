@@ -21,6 +21,7 @@ android {
         buildTypes.each {
             it.buildConfigField 'String', 'API_KEY', TMDB_KEY
             it.buildConfigField 'String', 'BASE_URL', BASE_URL
+            it.buildConfigField 'String', 'IMG_URL', IMG_URL
         }
     }
 

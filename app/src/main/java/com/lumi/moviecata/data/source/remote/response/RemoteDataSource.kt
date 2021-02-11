@@ -64,7 +64,7 @@ class RemoteDataSource {
         )
     }
 
-    fun getMovieDetail(movieId: String,getMovieDetailCallback: GetMovieDetailCallback){
+    fun getMovieDetail(movieId: Int,getMovieDetailCallback: GetMovieDetailCallback){
         EspressoIdlingResource.increment()
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -83,7 +83,7 @@ class RemoteDataSource {
         )
     }
 
-    fun getSeriesDetail(seriesId: String, getTvShowDetailCallback: GetSeriesDetailCallback){
+    fun getSeriesDetail(seriesId: Int, getTvShowDetailCallback: GetSeriesDetailCallback){
         EspressoIdlingResource.increment()
 
         Handler(Looper.getMainLooper()).postDelayed({

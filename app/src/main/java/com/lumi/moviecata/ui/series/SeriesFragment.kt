@@ -37,7 +37,7 @@ class SeriesFragment : Fragment() {
         adapter.setOnItemClickCallback(object : SeriesAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SeriesItem) {
                 val moveIntent = Intent(requireActivity(), DetailSeriesActivity::class.java)
-                moveIntent.putExtra(DetailSeriesActivity.EXTRA_SERIES, data.id.toString())
+                moveIntent.putExtra(DetailSeriesActivity.EXTRA_SERIES, data.id)
                 startActivity(moveIntent)
             }
         })

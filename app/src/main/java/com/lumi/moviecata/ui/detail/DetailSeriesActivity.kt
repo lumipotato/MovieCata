@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.source.remote.response.SeriesItem
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
@@ -33,7 +34,7 @@ class DetailSeriesActivity : AppCompatActivity() {
         seriesViewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
 
         val extras = intent.extras
-        val seriesId = extras?.getString(EXTRA_SERIES)
+        val seriesId = extras?.getInt(EXTRA_SERIES)
         if (seriesId != null) {
             seriesViewModel.getSeriesDetail(seriesId).observe(this) { detail ->
                 if (detail != null) {
@@ -48,7 +49,7 @@ class DetailSeriesActivity : AppCompatActivity() {
         detailContentBinding.textDescription.text = seriesItem.overview
 
         Glide.with(this)
-                .load(seriesItem.posterPath)
+                .load("${BuildConfig.IMG_URL}${seriesItem.posterPath}")
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))

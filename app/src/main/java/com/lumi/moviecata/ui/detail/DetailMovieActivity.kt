@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
@@ -33,7 +34,7 @@ class DetailMovieActivity : AppCompatActivity() {
         movieViewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
 
         val extras = intent.extras
-        val movieId = extras?.getString(EXTRA_MOVIE)
+        val movieId = extras?.getInt(EXTRA_MOVIE)
         if (movieId != null) {
             movieViewModel.getMovieDetail(movieId).observe(this) { detail ->
                 if (detail != null) {
@@ -48,7 +49,7 @@ class DetailMovieActivity : AppCompatActivity() {
         detailContentBinding.textDescription.text = movieItem.overview
 
         Glide.with(this)
-                .load(movieItem.posterPath)
+                .load("${BuildConfig.IMG_URL}${movieItem.posterPath}")
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))

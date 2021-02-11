@@ -1,7 +1,10 @@
 package com.lumi.moviecata.data.source.remote.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class SeriesItem(
 
 	@field:SerializedName("first_air_date")
@@ -22,9 +25,6 @@ data class SeriesItem(
 	@field:SerializedName("origin_country")
 	val originCountry: List<String?>? = null,
 
-	@field:SerializedName("backdrop_path")
-	val backdropPath: Any? = null,
-
 	@field:SerializedName("original_name")
 	val originalName: String? = null,
 
@@ -42,4 +42,4 @@ data class SeriesItem(
 
 	@field:SerializedName("vote_count")
 	val voteCount: Int? = null
-)
+):Parcelable

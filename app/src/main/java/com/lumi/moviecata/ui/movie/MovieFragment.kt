@@ -37,7 +37,7 @@ class MovieFragment : Fragment() {
         adapter.setOnItemClickCallback(object : MovieAdapter.OnItemClickCallback {
             override fun onItemClicked(data: MovieItem) {
                 val moveIntent = Intent(requireActivity(), DetailMovieActivity::class.java)
-                moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.id.toString())
+                moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.id)
                 startActivity(moveIntent)
             }
         })

@@ -6,7 +6,7 @@ import com.lumi.moviecata.data.source.remote.response.SeriesItem
 
 interface MovieCataDataSource {
     fun getMovie(): LiveData<List<MovieItem>>
-    fun getMovieDetail(movieId : String) : LiveData<MovieItem>
+    fun getMovieDetail(movieId : Int) : LiveData<MovieItem>
     fun getSeries(): LiveData<List<SeriesItem>>
-    fun getSeriesDetail(seriesId:String) : LiveData<SeriesItem>
+    fun getSeriesDetail(seriesId:Int) : LiveData<SeriesItem>
 }

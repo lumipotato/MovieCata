@@ -1,7 +1,10 @@
 package com.lumi.moviecata.data.source.remote.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class MovieItem(
 
 	@field:SerializedName("overview")
@@ -45,4 +48,4 @@ data class MovieItem(
 
 	@field:SerializedName("vote_count")
 	val voteCount: Int? = null
-)
+):Parcelable

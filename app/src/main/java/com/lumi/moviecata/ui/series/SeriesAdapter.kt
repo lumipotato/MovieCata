@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.source.remote.response.SeriesItem
 import com.lumi.moviecata.databinding.MovieItemsBinding
@@ -41,7 +42,7 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
 
                 tvItemTitle.text = series.name
                 Glide.with(itemView.context)
-                        .load(series.posterPath)
+                        .load("${BuildConfig.IMG_URL}${series.posterPath}")
                         .apply(
                                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                                         .error(R.drawable.ic_error))

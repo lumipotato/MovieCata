@@ -31,7 +31,7 @@ class MovieCataRepository (private val remoteDataSource: RemoteDataSource) : Mov
         return movieList
     }
 
-    override fun getMovieDetail(movieId: String): LiveData<MovieItem> {
+    override fun getMovieDetail(movieId: Int): LiveData<MovieItem> {
         val movieDetail = MutableLiveData<MovieItem>()
         remoteDataSource.getMovieDetail(movieId, object  : RemoteDataSource.GetMovieDetailCallback {
             override fun onResponse(movieResponse: MovieItem) {
@@ -63,7 +63,7 @@ class MovieCataRepository (private val remoteDataSource: RemoteDataSource) : Mov
         return  seriesList
     }
 
-    override fun getSeriesDetail(seriesId: String): LiveData<SeriesItem> {
+    override fun getSeriesDetail(seriesId: Int): LiveData<SeriesItem> {
         val seriesDetail = MutableLiveData<SeriesItem>()
         remoteDataSource.getSeriesDetail(seriesId, object  : RemoteDataSource.GetSeriesDetailCallback {
             override fun onResponse(seriesResponse: SeriesItem) {
