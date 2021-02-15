@@ -25,11 +25,12 @@ class RemoteDataSource {
     }
 
     private val request = ApiConfig.provide()
+    private val handler = Handler(Looper.getMainLooper())
 
     fun getMovie(getMovieCallback: GetMovieCallback){
         EspressoIdlingResource.increment()
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        handler.postDelayed({
             request.getMovie(BuildConfig.API_KEY).enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -48,7 +49,7 @@ class RemoteDataSource {
     fun getSeries(getSeriesCallback: GetSeriesCallback){
         EspressoIdlingResource.increment()
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        handler.postDelayed({
             request.getSeries(BuildConfig.API_KEY).enqueue(object : Callback<SeriesResponse> {
                 override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -67,7 +68,7 @@ class RemoteDataSource {
     fun getMovieDetail(movieId: Int,getMovieDetailCallback: GetMovieDetailCallback){
         EspressoIdlingResource.increment()
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        handler.postDelayed({
             request.getMovieDetail(movieId,BuildConfig.API_KEY).enqueue(object : Callback<MovieItem> {
                 override fun onFailure(call: Call<MovieItem>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -86,7 +87,7 @@ class RemoteDataSource {
     fun getSeriesDetail(seriesId: Int, getTvShowDetailCallback: GetSeriesDetailCallback){
         EspressoIdlingResource.increment()
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        handler.postDelayed({
             request.getSeriesDetail(seriesId,BuildConfig.API_KEY).enqueue(object : Callback<SeriesItem> {
                 override fun onFailure(call: Call<SeriesItem>, t: Throwable) {
                     Log.d("error",t.toString())

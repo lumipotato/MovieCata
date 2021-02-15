@@ -56,7 +56,7 @@ class MovieCataRepository (private val remoteDataSource: RemoteDataSource) : Mov
             }
 
             override fun onFailure() {
-                print("error to get movies")
+                print("error to get series")
             }
 
         })
@@ -71,7 +71,7 @@ class MovieCataRepository (private val remoteDataSource: RemoteDataSource) : Mov
             }
 
             override fun onFailure() {
-                print("error to get movies")
+                print("error to get series")
             }
 
         })
