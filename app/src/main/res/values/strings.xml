@@ -2,10 +2,8 @@
     <string name="app_name">Movie Cata</string>
     <string name="movie">Movie</string>
     <string name="series">Series</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
-    <string name="description_movie">Movie Description</string>
+    <string name="description_movie">Description</string>
     <string name="description">Description</string>
     <string name="image_splash">splash</string>
 </resources>

@@ -42,6 +42,8 @@ class SeriesFragment : Fragment() {
             }
         })
 
+        showLoading(true)
+
         if (activity != null) {
             val factory = ViewModelFactory.getInstance()
 
@@ -50,9 +52,18 @@ class SeriesFragment : Fragment() {
                 seriesViewModel.getSeries().observe(it, { movie ->
                     if (movie != null) {
                         adapter.listSeries = movie as ArrayList<SeriesItem>
+                        showLoading(false)
                     }
                 })
             }
+        }
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            fragmentSeriesBinding.progressBar.visibility = View.VISIBLE
+        } else {
+            fragmentSeriesBinding.progressBar.visibility = View.INVISIBLE
         }
     }
 }

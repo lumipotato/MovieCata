@@ -42,6 +42,8 @@ class MovieFragment : Fragment() {
             }
         })
 
+        showLoading(true)
+
         if (activity != null) {
             val factory = ViewModelFactory.getInstance()
 
@@ -50,10 +52,18 @@ class MovieFragment : Fragment() {
                 movieViewModel.getMovie().observe(it, { movie ->
                     if (movie != null) {
                         adapter.listMovies = movie as ArrayList<MovieItem>
+                        showLoading(false)
                     }
                 })
             }
+        }
+    }
 
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            fragmentMovieBinding.progressBar.visibility = View.VISIBLE
+        } else {
+            fragmentMovieBinding.progressBar.visibility = View.INVISIBLE
         }
     }
 }

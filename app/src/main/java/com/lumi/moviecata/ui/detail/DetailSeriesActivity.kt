@@ -1,6 +1,7 @@
 package com.lumi.moviecata.ui.detail
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -25,13 +26,15 @@ class DetailSeriesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activityDetailShowsBinding = ActivityDetailShowsBinding.inflate(layoutInflater)
-        detailContentBinding = activityDetailShowsBinding.detailContent
+        val showsBinding = ActivityDetailShowsBinding.inflate(layoutInflater)
+        detailContentBinding = showsBinding.detailContent
 
-        setContentView(activityDetailShowsBinding.root)
+        setContentView(showsBinding.root)
 
         val factory = ViewModelFactory.getInstance()
         seriesViewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+
+        showLoading(true)
 
         val extras = intent.extras
         val seriesId = extras?.getInt(EXTRA_SERIES)
@@ -39,6 +42,9 @@ class DetailSeriesActivity : AppCompatActivity() {
             seriesViewModel.getSeriesDetail(seriesId).observe(this) { detail ->
                 if (detail != null) {
                     populateSeries(detail)
+                    showLoading(false)
+                    detailContentBinding.imagePoster.visibility = View.VISIBLE
+                    detailContentBinding.textDesc.visibility = View.VISIBLE
                 }
             }
         }
@@ -54,5 +60,13 @@ class DetailSeriesActivity : AppCompatActivity() {
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))
                 .into(detailContentBinding.imagePoster)
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            detailContentBinding.progressBar.visibility = View.VISIBLE
+        } else {
+            detailContentBinding.progressBar.visibility = View.INVISIBLE
+        }
     }
 }

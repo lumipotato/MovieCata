@@ -2,6 +2,7 @@ package com.lumi.moviecata.ui.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -33,12 +34,17 @@ class DetailMovieActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance()
         movieViewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
 
+        showLoading(true)
+
         val extras = intent.extras
         val movieId = extras?.getInt(EXTRA_MOVIE)
         if (movieId != null) {
             movieViewModel.getMovieDetail(movieId).observe(this) { detail ->
                 if (detail != null) {
                     populateMovie(detail)
+                    showLoading(false)
+                    detailContentBinding.imagePoster.visibility = View.VISIBLE
+                    detailContentBinding.textDesc.visibility = View.VISIBLE
                 }
             }
         }
@@ -54,5 +60,13 @@ class DetailMovieActivity : AppCompatActivity() {
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))
                 .into(detailContentBinding.imagePoster)
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            detailContentBinding.progressBar.visibility = View.VISIBLE
+        } else {
+            detailContentBinding.progressBar.visibility = View.INVISIBLE
+        }
     }
 }
