@@ -41,7 +41,7 @@ class RemoteDataSource {
                 }
 
             })
-
+            EspressoIdlingResource.decrement()
         }, DELAY
         )
     }
@@ -79,7 +79,7 @@ class RemoteDataSource {
                 }
 
             })
-
+            EspressoIdlingResource.decrement()
         }, DELAY
         )
     }
@@ -98,7 +98,7 @@ class RemoteDataSource {
                 }
 
             })
-
+            EspressoIdlingResource.decrement()
         }, DELAY
         )
     }
