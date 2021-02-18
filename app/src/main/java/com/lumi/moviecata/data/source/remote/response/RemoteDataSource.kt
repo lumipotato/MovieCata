@@ -1,7 +1,5 @@
 package com.lumi.moviecata.data.source.remote.response
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.utils.espresso.EspressoIdlingResource
