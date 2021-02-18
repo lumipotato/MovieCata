@@ -52,9 +52,7 @@ class HomeActivityTest {
 
     @Test
     fun loadDetailMovies() {
-        delayExtra()
         onView(withId(R.id.rv_movie)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-        delayExtra()
         onView(withId(R.id.image_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.text_title)).check(matches(isDisplayed()))
         onView(withId(R.id.text_title)).check(matches(withText(dummyMovie[0].title)))
@@ -72,9 +70,7 @@ class HomeActivityTest {
     @Test
     fun loadDetailSeries() {
         onView(withText("Series")).perform(click())
-        delayExtra()
         onView(withId(R.id.rv_series)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-        delayExtra()
         onView(withId(R.id.image_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.text_title)).check(matches(isDisplayed()))
         onView(withId(R.id.text_title)).check(matches(withText(dummySeries[0].title)))
@@ -82,11 +78,4 @@ class HomeActivityTest {
         onView(withId(R.id.text_description)).check(matches(withText(dummySeries[0].description)))
     }
 
-    private fun delayExtra() {
-        try {
-            Thread.sleep(4000)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-    }
 }

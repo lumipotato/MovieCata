@@ -14,7 +14,6 @@ class RemoteDataSource {
 
     companion object {
 
-        private const val DELAY: Long = 2000
         @Volatile
         private var instance: RemoteDataSource? = null
 
@@ -25,12 +24,10 @@ class RemoteDataSource {
     }
 
     private val request = ApiConfig.provide()
-    private val handler = Handler(Looper.getMainLooper())
 
     fun getMovie(getMovieCallback: GetMovieCallback){
         EspressoIdlingResource.increment()
 
-        handler.postDelayed({
             request.getMovie(BuildConfig.API_KEY).enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -42,14 +39,12 @@ class RemoteDataSource {
 
             })
             EspressoIdlingResource.decrement()
-        }, DELAY
-        )
+
     }
 
     fun getSeries(getSeriesCallback: GetSeriesCallback){
         EspressoIdlingResource.increment()
 
-        handler.postDelayed({
             request.getSeries(BuildConfig.API_KEY).enqueue(object : Callback<SeriesResponse> {
                 override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -61,14 +56,12 @@ class RemoteDataSource {
 
             })
             EspressoIdlingResource.decrement()
-        }, DELAY
-        )
+
     }
 
     fun getMovieDetail(movieId: Int,getMovieDetailCallback: GetMovieDetailCallback){
         EspressoIdlingResource.increment()
 
-        handler.postDelayed({
             request.getMovieDetail(movieId,BuildConfig.API_KEY).enqueue(object : Callback<MovieItem> {
                 override fun onFailure(call: Call<MovieItem>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -80,14 +73,12 @@ class RemoteDataSource {
 
             })
             EspressoIdlingResource.decrement()
-        }, DELAY
-        )
+
     }
 
     fun getSeriesDetail(seriesId: Int, getTvShowDetailCallback: GetSeriesDetailCallback){
         EspressoIdlingResource.increment()
 
-        handler.postDelayed({
             request.getSeriesDetail(seriesId,BuildConfig.API_KEY).enqueue(object : Callback<SeriesItem> {
                 override fun onFailure(call: Call<SeriesItem>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -99,8 +90,7 @@ class RemoteDataSource {
 
             })
             EspressoIdlingResource.decrement()
-        }, DELAY
-        )
+
     }
 
     interface GetMovieCallback{
