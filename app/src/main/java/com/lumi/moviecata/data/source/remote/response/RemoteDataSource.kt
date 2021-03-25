@@ -49,7 +49,7 @@ class RemoteDataSource {
         EspressoIdlingResource.increment()
 
         val itemSeries = MutableLiveData<ApiResponse<List<SeriesItem>>>()
-        ApiResponse.success(
+
             request.getSeries(BuildConfig.API_KEY).enqueue(object : Callback<SeriesResponse> {
                 override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -59,7 +59,7 @@ class RemoteDataSource {
                     itemSeries.value = response.body()?.let { ApiResponse.success(it.results) }
                 }
 
-            }))
+            })
             EspressoIdlingResource.decrement()
 
         return itemSeries
@@ -69,7 +69,7 @@ class RemoteDataSource {
         EspressoIdlingResource.increment()
 
         val detailMovie = MutableLiveData<ApiResponse<MovieItem>>()
-        ApiResponse.success(
+
             request.getMovieDetail(movieId,BuildConfig.API_KEY).enqueue(object : Callback<MovieItem> {
                 override fun onFailure(call: Call<MovieItem>, t: Throwable) {
                     Log.d("error",t.toString())
@@ -79,7 +79,7 @@ class RemoteDataSource {
                     detailMovie.value = response.body()?.let { ApiResponse.success(it) }
                 }
 
-            }))
+            })
             EspressoIdlingResource.decrement()
 
         return detailMovie
@@ -89,7 +89,7 @@ class RemoteDataSource {
         EspressoIdlingResource.increment()
 
         val detailSeries = MutableLiveData<ApiResponse<SeriesItem>>()
-        ApiResponse.success(
+
             request.getSeriesDetail(tvId, BuildConfig.API_KEY).enqueue(object :
                 Callback<SeriesItem> {
                 override fun onFailure(call: Call<SeriesItem>, t: Throwable) {
@@ -101,7 +101,6 @@ class RemoteDataSource {
                 }
 
             })
-        )
             EspressoIdlingResource.decrement()
 
         return detailSeries
