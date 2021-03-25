@@ -1,9 +1,12 @@
 package com.lumi.moviecata.data.source.remote.response
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.lumi.moviecata.BuildConfig
+import com.lumi.moviecata.data.source.remote.ApiResponse
 import com.lumi.moviecata.utils.espresso.EspressoIdlingResource
-import com.lumi.moviecata.utils.retrofit.ApiConfig
+import com.lumi.moviecata.data.source.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,8 +26,9 @@ class RemoteDataSource {
 
     private val request = ApiConfig.provide()
 
-    fun getMovie(getMovieCallback: GetMovieCallback){
+    fun getMovie() : LiveData<ApiResponse<List<MovieItem>>>{
         EspressoIdlingResource.increment()
+        val itemMovie = MutableLiveData<ApiResponse<List<MovieItem>>>()
 
             request.getMovie(BuildConfig.API_KEY).enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
@@ -32,83 +36,75 @@ class RemoteDataSource {
                 }
 
                 override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                    response.body()?.results?.let { getMovieCallback.onResponse(it) }
+                    itemMovie.value = response.body()?.let { ApiResponse.success(it.results) }
                 }
 
             })
             EspressoIdlingResource.decrement()
 
+        return itemMovie
     }
 
-    fun getSeries(getSeriesCallback: GetSeriesCallback){
+    fun getSeries() : LiveData<ApiResponse<List<SeriesItem>>>{
         EspressoIdlingResource.increment()
 
+        val itemSeries = MutableLiveData<ApiResponse<List<SeriesItem>>>()
+        ApiResponse.success(
             request.getSeries(BuildConfig.API_KEY).enqueue(object : Callback<SeriesResponse> {
                 override fun onFailure(call: Call<SeriesResponse>, t: Throwable) {
                     Log.d("error",t.toString())
                 }
 
                 override fun onResponse(call: Call<SeriesResponse>, response: Response<SeriesResponse>) {
-                    response.body()?.results?.let { getSeriesCallback.onResponse(it) }
+                    itemSeries.value = response.body()?.let { ApiResponse.success(it.results) }
                 }
 
-            })
+            }))
             EspressoIdlingResource.decrement()
 
+        return itemSeries
     }
 
-    fun getMovieDetail(movieId: Int,getMovieDetailCallback: GetMovieDetailCallback){
+    fun getMovieDetail(movieId: Int) : LiveData<ApiResponse<MovieItem>>{
         EspressoIdlingResource.increment()
 
+        val detailMovie = MutableLiveData<ApiResponse<MovieItem>>()
+        ApiResponse.success(
             request.getMovieDetail(movieId,BuildConfig.API_KEY).enqueue(object : Callback<MovieItem> {
                 override fun onFailure(call: Call<MovieItem>, t: Throwable) {
                     Log.d("error",t.toString())
                 }
 
                 override fun onResponse(call: Call<MovieItem>, response: Response<MovieItem>) {
-                    response.body()?.let { getMovieDetailCallback.onResponse(it) }
+                    detailMovie.value = response.body()?.let { ApiResponse.success(it) }
                 }
 
-            })
+            }))
             EspressoIdlingResource.decrement()
 
+        return detailMovie
     }
 
-    fun getSeriesDetail(seriesId: Int, getTvShowDetailCallback: GetSeriesDetailCallback){
+    fun getSeriesDetail(tvId: Int) : LiveData<ApiResponse<SeriesItem>>{
         EspressoIdlingResource.increment()
 
-            request.getSeriesDetail(seriesId,BuildConfig.API_KEY).enqueue(object : Callback<SeriesItem> {
+        val detailSeries = MutableLiveData<ApiResponse<SeriesItem>>()
+        ApiResponse.success(
+            request.getSeriesDetail(tvId, BuildConfig.API_KEY).enqueue(object :
+                Callback<SeriesItem> {
                 override fun onFailure(call: Call<SeriesItem>, t: Throwable) {
-                    Log.d("error",t.toString())
+                    Log.d("error", t.toString())
                 }
 
                 override fun onResponse(call: Call<SeriesItem>, response: Response<SeriesItem>) {
-                    response.body()?.let { getTvShowDetailCallback.onResponse(it) }
+                    detailSeries.value = response.body()?.let { ApiResponse.success(it) }
                 }
 
             })
+        )
             EspressoIdlingResource.decrement()
 
-    }
-
-    interface GetMovieCallback{
-        fun onResponse(movieResponse : List<MovieItem>)
-        fun onFailure()
-    }
-
-    interface GetMovieDetailCallback{
-        fun onResponse(movieResponse : MovieItem)
-        fun onFailure()
-    }
-
-    interface GetSeriesCallback{
-        fun onResponse(seriesResponse : List<SeriesItem>)
-        fun onFailure()
-    }
-
-    interface GetSeriesDetailCallback{
-        fun onResponse(seriesResponse : SeriesItem)
-        fun onFailure()
+        return detailSeries
     }
 
 }

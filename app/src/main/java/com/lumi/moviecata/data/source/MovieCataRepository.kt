@@ -2,22 +2,27 @@ package com.lumi.moviecata.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.lumi.moviecata.data.source.local.LocalDataSource
 import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.data.source.remote.response.RemoteDataSource
 import com.lumi.moviecata.data.source.remote.response.SeriesItem
+import com.lumi.moviecata.utils.AppExecutors
+import com.lumi.moviecata.vo.Resource
 
-class MovieCataRepository (private val remoteDataSource: RemoteDataSource) : MovieCataDataSource {
+class MovieCataRepository (private val remoteDataSource: RemoteDataSource,
+                           private val localDataSource: LocalDataSource,
+                           private val appExecutors: AppExecutors) : MovieCataDataSource {
 
     companion object {
         @Volatile
         private var instance: MovieCataRepository? = null
-        fun getInstance(remoteData: RemoteDataSource): MovieCataRepository =
+        fun getInstance(remoteData: RemoteDataSource, localData: LocalDataSource, appExecutors: AppExecutors): MovieCataRepository =
             instance ?: synchronized(this) {
-                instance ?: MovieCataRepository(remoteData)
+                instance ?: MovieCataRepository(remoteData, localData, appExecutors)
             }
     }
 
-    override fun getMovie(): LiveData<List<MovieItem>> {
+    override fun getMovie(): LiveData<Resource<List<MovieItem>>> {
         val movieList = MutableLiveData<List<MovieItem>>()
         remoteDataSource.getMovie(object  : RemoteDataSource.GetMovieCallback {
             override fun onResponse(movieResponse: List<MovieItem>) {

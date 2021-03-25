@@ -6,7 +6,8 @@ import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.data.source.remote.response.RemoteDataSource
 import com.lumi.moviecata.data.source.remote.response.SeriesItem
 
-class FakeMovieCataRepository (private val remoteDataSource: RemoteDataSource) : MovieCataDataSource {
+class FakeMovieCataRepository (private val remoteDataSource: RemoteDataSource) :
+    MovieCataDataSource {
 
     override fun getMovie(): LiveData<List<MovieItem>> {
         val movieList = MutableLiveData<List<MovieItem>>()

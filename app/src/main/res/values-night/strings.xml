@@ -6,4 +6,6 @@
     <string name="description_movie">Description</string>
     <string name="description">Description</string>
     <string name="image_splash">splash</string>
+    <string name="moviefav">Favorite Movie</string>
+    <string name="seriesfav">Favorite Series</string>
 </resources>

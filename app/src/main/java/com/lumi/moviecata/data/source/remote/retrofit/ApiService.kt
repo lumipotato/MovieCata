@@ -1,4 +1,4 @@
-package com.lumi.moviecata.utils.retrofit
+package com.lumi.moviecata.data.source.remote.retrofit
 
 import com.lumi.moviecata.data.source.remote.response.*
 import retrofit2.Call
@@ -19,6 +19,6 @@ interface ApiService {
                         @Query("api_key") apiKey: String?) : Call<MovieItem>
 
     @GET("tv/{tv_id}")
-    fun getSeriesDetail(@Path("tv_id") seriesId: Int?,
+    fun getSeriesDetail(@Path("tv_id") tvId: Int?,
                          @Query("api_key") apiKey: String?) : Call<SeriesItem>
 }
