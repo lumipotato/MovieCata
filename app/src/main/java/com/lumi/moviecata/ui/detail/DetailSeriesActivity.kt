@@ -9,11 +9,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.source.remote.response.SeriesItem
+import com.lumi.moviecata.data.source.local.entity.SeriesDetailEntity
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
 import com.lumi.moviecata.databinding.ContentDetailShowsBinding
-import com.lumi.moviecata.viewmodel.SeriesViewModel
 import com.lumi.moviecata.viewmodel.ViewModelFactory
+import com.lumi.moviecata.vo.Resource
 
 class DetailSeriesActivity : AppCompatActivity() {
 
@@ -22,7 +22,7 @@ class DetailSeriesActivity : AppCompatActivity() {
     }
 
     private lateinit var detailContentBinding: ContentDetailShowsBinding
-    private lateinit var seriesViewModel: SeriesViewModel
+    private lateinit var seriesViewModel: DetailSeriesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +31,8 @@ class DetailSeriesActivity : AppCompatActivity() {
 
         setContentView(showsBinding.root)
 
-        val factory = ViewModelFactory.getInstance()
-        seriesViewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(applicationContext)
+        seriesViewModel = ViewModelProvider(this, factory)[DetailSeriesViewModel::class.java]
 
         showLoading(true)
 
@@ -50,12 +50,12 @@ class DetailSeriesActivity : AppCompatActivity() {
         }
 
     }
-    private fun populateSeries(seriesItem: SeriesItem) {
-        detailContentBinding.textTitle.text = seriesItem.name
-        detailContentBinding.textDescription.text = seriesItem.overview
+    private fun populateSeries(seriesItem: Resource<SeriesDetailEntity>) {
+        detailContentBinding.textTitle.text = seriesItem.data?.title
+        detailContentBinding.textDescription.text = seriesItem.data?.description
 
         Glide.with(this)
-                .load("${BuildConfig.IMG_URL}${seriesItem.posterPath}")
+                .load("${BuildConfig.IMG_URL}${seriesItem.data?.imagePath}")
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))

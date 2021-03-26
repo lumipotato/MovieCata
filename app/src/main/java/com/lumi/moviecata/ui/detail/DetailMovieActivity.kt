@@ -9,11 +9,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.source.remote.response.MovieItem
+import com.lumi.moviecata.data.source.local.entity.MovieDetailEntity
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
 import com.lumi.moviecata.databinding.ContentDetailShowsBinding
-import com.lumi.moviecata.viewmodel.MovieViewModel
 import com.lumi.moviecata.viewmodel.ViewModelFactory
+import com.lumi.moviecata.vo.Resource
 
 class DetailMovieActivity : AppCompatActivity() {
 
@@ -22,7 +22,7 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     private lateinit var detailContentBinding: ContentDetailShowsBinding
-    private lateinit var movieViewModel: MovieViewModel
+    private lateinit var movieViewModel: DetailMovieViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +31,8 @@ class DetailMovieActivity : AppCompatActivity() {
 
         setContentView(activityDetailShowsBinding.root)
 
-        val factory = ViewModelFactory.getInstance()
-        movieViewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(applicationContext)
+        movieViewModel = ViewModelProvider(this, factory)[DetailMovieViewModel::class.java]
 
         showLoading(true)
 
@@ -50,12 +50,12 @@ class DetailMovieActivity : AppCompatActivity() {
         }
 
     }
-    private fun populateMovie(movieItem: MovieItem) {
-        detailContentBinding.textTitle.text = movieItem.title
-        detailContentBinding.textDescription.text = movieItem.overview
+    private fun populateMovie(movieItem: Resource<MovieDetailEntity>) {
+        detailContentBinding.textTitle.text = movieItem.data?.title
+        detailContentBinding.textDescription.text = movieItem.data?.description
 
         Glide.with(this)
-                .load("${BuildConfig.IMG_URL}${movieItem.posterPath}")
+                .load("${BuildConfig.IMG_URL}${movieItem.data?.imagePath}")
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))

@@ -12,7 +12,7 @@ import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.databinding.FragmentMovieBinding
 import com.lumi.moviecata.ui.detail.DetailMovieActivity
 import com.lumi.moviecata.ui.movie.MovieAdapter
-import com.lumi.moviecata.viewmodel.MovieViewModel
+import com.lumi.moviecata.ui.movie.MovieViewModel
 import com.lumi.moviecata.viewmodel.ViewModelFactory
 
 class FavoriteMovieFragment : Fragment() {

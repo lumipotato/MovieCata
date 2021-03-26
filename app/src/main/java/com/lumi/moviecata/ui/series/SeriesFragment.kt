@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lumi.moviecata.data.source.remote.response.SeriesItem
 import com.lumi.moviecata.databinding.FragmentSeriesBinding
 import com.lumi.moviecata.ui.detail.DetailSeriesActivity
-import com.lumi.moviecata.viewmodel.SeriesViewModel
 import com.lumi.moviecata.viewmodel.ViewModelFactory
 
 class SeriesFragment : Fragment() {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.lumi.moviecata.data.source.MovieCataRepository
 import com.lumi.moviecata.data.source.remote.response.MovieItem
+import com.lumi.moviecata.ui.movie.MovieViewModel
 import com.lumi.moviecata.utils.DataDummy
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
