@@ -5,8 +5,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "movieentities")
-data class MovieEntity (
+@Entity(tableName = "seriesdetails")
+data class SeriesDetailEntity (
         @PrimaryKey
         @NonNull
         @ColumnInfo(name = "id")
@@ -19,8 +19,6 @@ data class MovieEntity (
         var description: String,
 
         @ColumnInfo(name = "poster_path")
-        var imagePath: String,
+        var imagePath: String
 
-        @ColumnInfo(name = "bookmarked")
-        var bookmarked: Boolean = false
-)
+        )

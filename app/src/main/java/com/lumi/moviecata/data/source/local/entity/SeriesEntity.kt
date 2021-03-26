@@ -10,7 +10,7 @@ class SeriesEntity (
         @PrimaryKey
         @NonNull
         @ColumnInfo(name = "id")
-        var tvId: String,
+        var tvId: Int,
 
         @ColumnInfo(name = "name")
         var title: String,
@@ -19,5 +19,8 @@ class SeriesEntity (
         var description: String,
 
         @ColumnInfo(name = "poster_path")
-        var imagePath: String
+        var imagePath: String,
+
+        @ColumnInfo(name = "bookmarked")
+        var bookmarked: Boolean = false
 )
