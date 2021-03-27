@@ -8,4 +8,7 @@
     <string name="image_splash">splash</string>
     <string name="moviefav">Favorite Movie</string>
     <string name="seriesfav">Favorite Series</string>
+    <string name="favorite">Favorite</string>
+    <string name="search">Search</string>
+    <string name="menu_detail">Detail Menu</string>
 </resources>

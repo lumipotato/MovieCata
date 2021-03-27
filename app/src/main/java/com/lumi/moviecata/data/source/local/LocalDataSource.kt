@@ -1,9 +1,7 @@
 package com.lumi.moviecata.data.source.local
 
 import androidx.lifecycle.LiveData
-import com.lumi.moviecata.data.source.local.entity.MovieDetailEntity
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
-import com.lumi.moviecata.data.source.local.entity.SeriesDetailEntity
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.data.source.local.room.CataDao
 
@@ -20,17 +18,17 @@ class LocalDataSource private constructor(private val mCataDao: CataDao) {
 
     fun getAllSeries(): LiveData<List<SeriesEntity>> = mCataDao.getSeries()
 
-    fun getMoviesById(movieId: Int): LiveData<MovieDetailEntity> = mCataDao.getMoviesById(movieId)
+    fun getMoviesById(movieId: Int): LiveData<MovieEntity> = mCataDao.getMoviesById(movieId)
 
-    fun getSeriesById(tvId: Int): LiveData<SeriesDetailEntity> = mCataDao.getSeriesById(tvId)
+    fun getSeriesById(tvId: Int): LiveData<SeriesEntity> = mCataDao.getSeriesById(tvId)
 
     fun insertMovies(movies: List<MovieEntity>) = mCataDao.insertMovies(movies)
 
     fun insertSeries(series: List<SeriesEntity>) = mCataDao.insertSeries(series)
 
-    fun insertMoviesDetail(movies: MovieDetailEntity) = mCataDao.insertMoviesDetail(movies)
+    fun insertMoviesDetail(movies: MovieEntity) = mCataDao.insertMoviesDetail(movies)
 
-    fun insertSeriesDetail(series: SeriesDetailEntity) = mCataDao.insertSeriesDetail(series)
+    fun insertSeriesDetail(series: SeriesEntity) = mCataDao.insertSeriesDetail(series)
 
     fun getBookmarkedMovies(): LiveData<List<MovieEntity>> = mCataDao.getBookmarkedMovies()
 

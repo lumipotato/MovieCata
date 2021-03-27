@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lumi.moviecata">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -9,15 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieCata">
-        <activity android:name=".ui.favorite.FavoriteActivity"></activity>
+        <activity android:name=".ui.favorite.FavoriteActivity" />
         <activity
             android:name=".ui.detail.DetailSeriesActivity"
             android:parentActivityName=".ui.home.HomeActivity"
-            android:theme="@style/Theme.MovieCata.NoActionBar" />
+            />
         <activity
             android:name=".ui.detail.DetailMovieActivity"
             android:parentActivityName=".ui.home.HomeActivity"
-            android:theme="@style/Theme.MovieCata.NoActionBar" />
+            />
         <activity android:name=".ui.home.HomeActivity" />
         <activity
             android:name=".ui.home.SplashActivity"
@@ -30,6 +32,6 @@
         </activity>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+
 
 </manifest>

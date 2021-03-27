@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.source.local.entity.SeriesDetailEntity
+import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
 import com.lumi.moviecata.databinding.ContentDetailShowsBinding
 import com.lumi.moviecata.viewmodel.ViewModelFactory
@@ -50,7 +50,7 @@ class DetailSeriesActivity : AppCompatActivity() {
         }
 
     }
-    private fun populateSeries(seriesItem: Resource<SeriesDetailEntity>) {
+    private fun populateSeries(seriesItem: Resource<SeriesEntity>) {
         detailContentBinding.textTitle.text = seriesItem.data?.title
         detailContentBinding.textDescription.text = seriesItem.data?.description
 

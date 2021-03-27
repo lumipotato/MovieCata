@@ -3,9 +3,7 @@ package com.lumi.moviecata.data.source
 import androidx.lifecycle.LiveData
 import com.lumi.moviecata.data.NetworkBoundResource
 import com.lumi.moviecata.data.source.local.LocalDataSource
-import com.lumi.moviecata.data.source.local.entity.MovieDetailEntity
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
-import com.lumi.moviecata.data.source.local.entity.SeriesDetailEntity
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.data.source.remote.ApiResponse
 import com.lumi.moviecata.data.source.remote.response.MovieItem
@@ -51,16 +49,16 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
         }.asLiveData()
     }
 
-    override fun getMovieDetail(movieId: Int): LiveData<Resource<MovieDetailEntity>> {
-        return object : NetworkBoundResource<MovieDetailEntity, MovieItem>(appExecutors) {
-            public override fun loadFromDB(): LiveData<MovieDetailEntity> =
+    override fun getMovieDetail(movieId: Int): LiveData<Resource<MovieEntity>> {
+        return object : NetworkBoundResource<MovieEntity, MovieItem>(appExecutors) {
+            public override fun loadFromDB(): LiveData<MovieEntity> =
                     localDataSource.getMoviesById(movieId)
-            override fun shouldFetch(data: MovieDetailEntity?): Boolean =
+            override fun shouldFetch(data: MovieEntity?): Boolean =
                     data == null
             public override fun createCall(): LiveData<ApiResponse<MovieItem>> =
                     remoteDataSource.getMovieDetail(movieId)
             public override fun saveCallResult(data: MovieItem) {
-                val moviesDetail = MovieDetailEntity(
+                val moviesDetail = MovieEntity(
                         data.id,
                         data.title,
                         data.overview,
@@ -95,16 +93,16 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
         }.asLiveData()
     }
 
-    override fun getSeriesDetail(seriesId: Int): LiveData<Resource<SeriesDetailEntity>> {
-        return object : NetworkBoundResource<SeriesDetailEntity, SeriesItem>(appExecutors) {
-            public override fun loadFromDB(): LiveData<SeriesDetailEntity> =
+    override fun getSeriesDetail(seriesId: Int): LiveData<Resource<SeriesEntity>> {
+        return object : NetworkBoundResource<SeriesEntity, SeriesItem>(appExecutors) {
+            public override fun loadFromDB(): LiveData<SeriesEntity> =
                     localDataSource.getSeriesById(seriesId)
-            override fun shouldFetch(data: SeriesDetailEntity?): Boolean =
+            override fun shouldFetch(data: SeriesEntity?): Boolean =
                     data == null
             public override fun createCall(): LiveData<ApiResponse<SeriesItem>> =
                     remoteDataSource.getSeriesDetail(seriesId)
             public override fun saveCallResult(data: SeriesItem) {
-                val seriesDetail = SeriesDetailEntity(
+                val seriesDetail = SeriesEntity(
                         data.id,
                         data.name,
                         data.overview,

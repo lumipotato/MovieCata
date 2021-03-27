@@ -2,9 +2,7 @@ package com.lumi.moviecata.data.source.local.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.lumi.moviecata.data.source.local.entity.MovieDetailEntity
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
-import com.lumi.moviecata.data.source.local.entity.SeriesDetailEntity
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 
 
@@ -17,11 +15,11 @@ interface CataDao {
     @Query("SELECT * FROM seriesentities")
     fun getSeries(): LiveData<List<SeriesEntity>>
 
-    @Query("SELECT * FROM moviedetails WHERE id = :movieId")
-    fun getMoviesById(movieId: Int): LiveData<MovieDetailEntity>
+    @Query("SELECT * FROM movieentities WHERE id = :movieId")
+    fun getMoviesById(movieId: Int): LiveData<MovieEntity>
 
-    @Query("SELECT * FROM seriesdetails WHERE id = :tvId")
-    fun getSeriesById(tvId: Int): LiveData<SeriesDetailEntity>
+    @Query("SELECT * FROM seriesentities WHERE id = :tvId")
+    fun getSeriesById(tvId: Int): LiveData<SeriesEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovies(movies: List<MovieEntity>)
@@ -30,10 +28,10 @@ interface CataDao {
     fun insertSeries(series: List<SeriesEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMoviesDetail(movies: MovieDetailEntity)
+    fun insertMoviesDetail(movies: MovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSeriesDetail(series: SeriesDetailEntity)
+    fun insertSeriesDetail(series: SeriesEntity)
 
     @Query("SELECT * FROM movieentities where bookmarked = 1")
     fun getBookmarkedMovies(): LiveData<List<MovieEntity>>
