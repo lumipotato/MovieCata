@@ -10,9 +10,9 @@ data class SeriesDetailEntity (
         @PrimaryKey
         @NonNull
         @ColumnInfo(name = "id")
-        var movieId: Int,
+        var tvId: Int,
 
-        @ColumnInfo(name = "title")
+        @ColumnInfo(name = "name")
         var title: String,
 
         @ColumnInfo(name = "overview")

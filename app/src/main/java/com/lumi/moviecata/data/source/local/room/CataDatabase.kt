@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.lumi.moviecata.data.source.local.entity.MovieDetailEntity
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
+import com.lumi.moviecata.data.source.local.entity.SeriesDetailEntity
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 
-@Database(entities = [MovieEntity::class, SeriesEntity::class],
+@Database(entities = [MovieEntity::class, SeriesEntity::class, MovieDetailEntity::class, SeriesDetailEntity::class],
     version = 1,
     exportSchema = false)
 abstract class CataDatabase : RoomDatabase() {
