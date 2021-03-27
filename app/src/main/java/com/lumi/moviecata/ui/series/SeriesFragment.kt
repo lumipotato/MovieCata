@@ -5,17 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lumi.moviecata.data.source.remote.response.SeriesItem
+import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.databinding.FragmentSeriesBinding
 import com.lumi.moviecata.ui.detail.DetailSeriesActivity
 import com.lumi.moviecata.viewmodel.ViewModelFactory
+import com.lumi.moviecata.vo.Status
 
 class SeriesFragment : Fragment() {
     private lateinit var fragmentSeriesBinding: FragmentSeriesBinding
-    private lateinit var seriesViewModel: SeriesViewModel
     private lateinit var adapter: SeriesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -34,35 +35,35 @@ class SeriesFragment : Fragment() {
         fragmentSeriesBinding.rvSeries.adapter = adapter
 
         adapter.setOnItemClickCallback(object : SeriesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: SeriesItem) {
+            override fun onItemClicked(data: SeriesEntity) {
                 val moveIntent = Intent(requireActivity(), DetailSeriesActivity::class.java)
-                moveIntent.putExtra(DetailSeriesActivity.EXTRA_SERIES, data.id)
+                moveIntent.putExtra(DetailSeriesActivity.EXTRA_SERIES, data.tvId)
                 startActivity(moveIntent)
             }
         })
 
-        showLoading(true)
-
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance()
 
-            seriesViewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
-            activity?.let {
-                seriesViewModel.getSeries().observe(it, { movie ->
-                    if (movie != null) {
-                        adapter.listSeries = movie as ArrayList<SeriesItem>
-                        showLoading(false)
+            val factory = ViewModelFactory.getInstance(requireActivity())
+            val viewModel = ViewModelProvider(this, factory)[SeriesViewModel::class.java]
+
+            viewModel.getSeries().observe(this, { series ->
+                if (series != null) {
+                    when (series.status) {
+                        Status.LOADING -> fragmentSeriesBinding.progressBar.visibility = View.VISIBLE
+                        Status.SUCCESS -> {
+                            fragmentSeriesBinding.progressBar.visibility = View.GONE
+                            adapter.setSeries(series.data)
+                            adapter.notifyDataSetChanged()
+                        }
+                        Status.ERROR -> {
+                            fragmentSeriesBinding.progressBar.visibility = View.GONE
+                            Toast.makeText(context, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                })
-            }
-        }
-    }
+                }
+            })
 
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            fragmentSeriesBinding.progressBar.visibility = View.VISIBLE
-        } else {
-            fragmentSeriesBinding.progressBar.visibility = View.INVISIBLE
         }
     }
 }

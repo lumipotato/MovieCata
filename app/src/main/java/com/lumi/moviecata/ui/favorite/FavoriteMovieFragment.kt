@@ -5,20 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lumi.moviecata.data.source.remote.response.MovieItem
+import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.databinding.FragmentMovieBinding
 import com.lumi.moviecata.ui.detail.DetailMovieActivity
 import com.lumi.moviecata.ui.movie.MovieAdapter
 import com.lumi.moviecata.ui.movie.MovieViewModel
 import com.lumi.moviecata.viewmodel.ViewModelFactory
+import com.lumi.moviecata.vo.Status
 
 class FavoriteMovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
     private lateinit var adapter: MovieAdapter
-    private lateinit var movieViewModel: MovieViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -36,35 +37,35 @@ class FavoriteMovieFragment : Fragment() {
         fragmentMovieBinding.rvMovie.adapter = adapter
 
         adapter.setOnItemClickCallback(object : MovieAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: MovieItem) {
+            override fun onItemClicked(data: MovieEntity) {
                 val moveIntent = Intent(requireActivity(), DetailMovieActivity::class.java)
-                moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.id)
+                moveIntent.putExtra(DetailMovieActivity.EXTRA_MOVIE, data.movieId)
                 startActivity(moveIntent)
             }
         })
 
-        showLoading(true)
-
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance()
 
-            movieViewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
-            activity?.let {
-                movieViewModel.getMovie().observe(it, { movie ->
-                    if (movie != null) {
-                        adapter.listMovies = movie as ArrayList<MovieItem>
-                        showLoading(false)
+            val factory = ViewModelFactory.getInstance(requireActivity())
+            val viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
+
+            viewModel.getMovie().observe(this, { movies ->
+                if (movies != null) {
+                    when (movies.status) {
+                        Status.LOADING -> fragmentMovieBinding.progressBar.visibility = View.VISIBLE
+                        Status.SUCCESS -> {
+                            fragmentMovieBinding.progressBar.visibility = View.GONE
+                            adapter.setMovies(movies.data)
+                            adapter.notifyDataSetChanged()
+                        }
+                        Status.ERROR -> {
+                            fragmentMovieBinding.progressBar.visibility = View.GONE
+                            Toast.makeText(context, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                })
-            }
-        }
-    }
+                }
+            })
 
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            fragmentMovieBinding.progressBar.visibility = View.VISIBLE
-        } else {
-            fragmentMovieBinding.progressBar.visibility = View.INVISIBLE
         }
     }
 }

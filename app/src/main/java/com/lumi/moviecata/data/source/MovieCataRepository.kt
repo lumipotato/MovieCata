@@ -104,13 +104,13 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
             public override fun createCall(): LiveData<ApiResponse<SeriesItem>> =
                     remoteDataSource.getSeriesDetail(seriesId)
             public override fun saveCallResult(data: SeriesItem) {
-                val seriesDetail = MovieDetailEntity(
+                val seriesDetail = SeriesDetailEntity(
                         data.id,
                         data.name,
                         data.overview,
                         data.posterPath
                 )
-                localDataSource.insertMoviesDetail(seriesDetail)
+                localDataSource.insertSeriesDetail(seriesDetail)
             }
         }.asLiveData()
     }

@@ -7,23 +7,23 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.source.remote.response.SeriesItem
+import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.databinding.MovieItemsBinding
 import java.util.ArrayList
 
 class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
     private var onItemClickCallback: OnItemClickCallback? = null
+    private var listSeries = ArrayList<SeriesEntity>()
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    var listSeries = ArrayList<SeriesItem>()
-        set(movie) {
-            this.listSeries.clear()
-            this.listSeries.addAll(movie)
-            notifyDataSetChanged()
-        }
+    fun setSeries(series: List<SeriesEntity>?) {
+        if (series == null) return
+        this.listSeries.clear()
+        this.listSeries.addAll(series)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriesViewHolder {
         val movieItemsBinding = MovieItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -37,12 +37,12 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
     override fun getItemCount(): Int = listSeries.size
 
     inner class SeriesViewHolder(private val binding: MovieItemsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(series: SeriesItem) {
+        fun bind(series: SeriesEntity) {
             with(binding) {
 
-                tvItemTitle.text = series.name
+                tvItemTitle.text = series.title
                 Glide.with(itemView.context)
-                        .load("${BuildConfig.IMG_URL}${series.posterPath}")
+                        .load("${BuildConfig.IMG_URL}${series.imagePath}")
                         .apply(
                                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                                         .error(R.drawable.ic_error))
@@ -53,6 +53,6 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
         }
     }
     interface OnItemClickCallback {
-        fun onItemClicked(data: SeriesItem)
+        fun onItemClicked(data: SeriesEntity)
     }
 }

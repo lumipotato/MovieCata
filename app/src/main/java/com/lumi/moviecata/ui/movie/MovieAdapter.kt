@@ -7,22 +7,23 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.source.remote.response.MovieItem
+import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.databinding.MovieItemsBinding
+import java.util.ArrayList
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private var onItemClickCallback: OnItemClickCallback? = null
+    private var listMovies = ArrayList<MovieEntity>()
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    var listMovies = ArrayList<MovieItem>()
-        set(movie) {
-            this.listMovies.clear()
-            this.listMovies.addAll(movie)
-            notifyDataSetChanged()
-        }
+    fun setMovies(movies: List<MovieEntity>?) {
+        if (movies == null) return
+        this.listMovies.clear()
+        this.listMovies.addAll(movies)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val movieItemsBinding = MovieItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -36,12 +37,12 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     override fun getItemCount(): Int = listMovies.size
 
     inner class MovieViewHolder(private val binding: MovieItemsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieItem) {
+        fun bind(movie: MovieEntity) {
             with(binding) {
 
                 tvItemTitle.text = movie.title
                 Glide.with(itemView.context)
-                    .load("${BuildConfig.IMG_URL}${movie.posterPath}")
+                    .load("${BuildConfig.IMG_URL}${movie.imagePath}")
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))
@@ -52,6 +53,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
         }
     }
     interface OnItemClickCallback {
-        fun onItemClicked(data: MovieItem)
+        fun onItemClicked(data: MovieEntity)
     }
 }
