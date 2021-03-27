@@ -70,9 +70,8 @@ class DetailMovieActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
-        val extras = intent.extras
-        val movieId = extras?.getInt(EXTRA_MOVIE)
-        movieViewModel.getMovieDetail(movieId!!).observe(this, { movie ->
+        this.menu = menu
+        movieViewModel.mMovie.observe(this, { movie ->
             if (movie != null) {
                 when (movie.status) {
                     Status.LOADING -> detailContentBinding.progressBar.visibility = View.VISIBLE

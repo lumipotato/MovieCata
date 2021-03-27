@@ -10,23 +10,22 @@ import com.lumi.moviecata.vo.Resource
 
 class DetailMovieViewModel (private val movieCataRepository: MovieCataRepository) : ViewModel(){
 
-    private val courseId = MutableLiveData<Int>()
-
     fun getMovieDetail(movieId: Int) : LiveData<Resource<MovieEntity>> = movieCataRepository.getMovieDetail(movieId)
 
-    private var courseModule: LiveData<Resource<MovieEntity>> =
-            Transformations.switchMap(courseId) { mCourseId ->
-                movieCataRepository.getMovieDetail(mCourseId)
+    private val movieId = MutableLiveData<Int>()
+    var mMovie: LiveData<Resource<MovieEntity>> =
+            Transformations.switchMap(movieId) { mMovieId ->
+                movieCataRepository.getMovieDetail(mMovieId)
             }
 
     fun setBookmark() {
-        val moduleResource = courseModule.value
-        if (moduleResource != null) {
-            val courseWithModule = moduleResource.data
+        val movieResource = mMovie.value
+        if (movieResource != null) {
+            val movieEntity = movieResource.data
 
-            if (courseWithModule != null) {
-                val newState = !courseWithModule.bookmarked
-                movieCataRepository.setMoviesBookmark(courseWithModule, newState)
+            if (movieEntity != null) {
+                val newState = !movieEntity.bookmarked
+                movieCataRepository.setMoviesBookmark(movieEntity, newState)
             }
         }
     }

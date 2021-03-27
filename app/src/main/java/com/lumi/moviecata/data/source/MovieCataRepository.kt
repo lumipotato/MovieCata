@@ -62,7 +62,8 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
                         data.id,
                         data.title,
                         data.overview,
-                        data.posterPath
+                        data.posterPath,
+                        false
                 )
                 localDataSource.insertMoviesDetail(moviesDetail)
             }
@@ -106,7 +107,8 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
                         data.id,
                         data.name,
                         data.overview,
-                        data.posterPath
+                        data.posterPath,
+                        false
                 )
                 localDataSource.insertSeriesDetail(seriesDetail)
             }
