@@ -39,19 +39,19 @@ class MovieViewModelTest {
     }
 
     @Test
-    fun getCourses() {
-        val dummyCourses = Resource.success(pagedList)
-        `when`(dummyCourses.data?.size).thenReturn(5)
-        val courses = MutableLiveData<Resource<PagedList<MovieEntity>>>()
-        courses.value = dummyCourses
+    fun getMovies() {
+        val dummyMovies = Resource.success(pagedList)
+        `when`(dummyMovies.data?.size).thenReturn(20)
+        val movies = MutableLiveData<Resource<PagedList<MovieEntity>>>()
+        movies.value = dummyMovies
 
-        `when`(repository.getMovie()).thenReturn(courses)
-        val courseEntities = viewModel.getMovie().value?.data
+        `when`(repository.getMovie()).thenReturn(movies)
+        val movieEntities = viewModel.getMovie().value?.data
         verify(repository).getMovie()
-        Assert.assertNotNull(courseEntities)
-        Assert.assertEquals(5, courseEntities?.size)
+        Assert.assertNotNull(movieEntities)
+        Assert.assertEquals(20, movieEntities?.size)
 
         viewModel.getMovie().observeForever(observer)
-        verify(observer).onChanged(dummyCourses)
+        verify(observer).onChanged(dummyMovies)
     }
 }
