@@ -50,7 +50,7 @@ class FavoriteSeriesFragment : Fragment() {
         if (activity != null) {
 
             val factory = ViewModelFactory.getInstance(requireActivity())
-            val viewModel = ViewModelProvider(this, factory)[FavoriteSeriesViewModel::class.java]
+            viewModel = ViewModelProvider(this, factory)[FavoriteSeriesViewModel::class.java]
 
             showLoading(true)
             viewModel.getFavSeries().observe(this, { series ->
@@ -87,12 +87,12 @@ class FavoriteSeriesFragment : Fragment() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             if (view != null) {
                 val swipedPosition = viewHolder.adapterPosition
-                val courseEntity = adapter.getSwipedData(swipedPosition)
-                courseEntity?.let { viewModel.setBookmark(it) }
+                val seriesEntity = adapter.getSwipedData(swipedPosition)
+                seriesEntity?.let { viewModel.setBookmark(it) }
 
                 val snackbar = Snackbar.make(view as View, R.string.message_undo, Snackbar.LENGTH_LONG)
                 snackbar.setAction(R.string.message_ok) { _ ->
-                    courseEntity?.let { viewModel.setBookmark(it) }
+                    seriesEntity?.let { viewModel.setBookmark(it) }
                 }
                 snackbar.show()
             }

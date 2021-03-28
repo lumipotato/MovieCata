@@ -1,73 +1,151 @@
 package com.lumi.moviecata.data.source
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.lumi.moviecata.data.NetworkBoundResource
+import com.lumi.moviecata.data.source.local.LocalDataSource
+import com.lumi.moviecata.data.source.local.entity.MovieEntity
+import com.lumi.moviecata.data.source.local.entity.SeriesEntity
+import com.lumi.moviecata.data.source.remote.ApiResponse
 import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.data.source.remote.response.RemoteDataSource
 import com.lumi.moviecata.data.source.remote.response.SeriesItem
+import com.lumi.moviecata.utils.AppExecutors
+import com.lumi.moviecata.vo.Resource
 
-class FakeMovieCataRepository (private val remoteDataSource: RemoteDataSource) :
-    MovieCataDataSource {
+class FakeMovieCataRepository constructor(private val remoteDataSource: RemoteDataSource,
+                                          private val localDataSource: LocalDataSource,
+                                          private val appExecutors: AppExecutors
+) : MovieCataDataSource {
 
-    override fun getMovie(): LiveData<List<MovieItem>> {
-        val movieList = MutableLiveData<List<MovieItem>>()
-        remoteDataSource.getMovie(object  : RemoteDataSource.GetMovieCallback {
-            override fun onResponse(movieResponse: List<MovieItem>) {
-                movieList.postValue(movieResponse)
+    override fun getMovie(): LiveData<Resource<PagedList<MovieEntity>>> {
+        return object : NetworkBoundResource<PagedList<MovieEntity>, List<MovieItem>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<MovieEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(4)
+                    .setPageSize(4)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getAllMovies(), config).build()
             }
+            override fun shouldFetch(data: PagedList<MovieEntity>?): Boolean =
+                data == null || data.isEmpty()
+            public override fun createCall(): LiveData<ApiResponse<List<MovieItem>>> =
+                remoteDataSource.getMovie()
+            public override fun saveCallResult(data: List<MovieItem>) {
+                val movieList = ArrayList<MovieEntity>()
+                for (response in data) {
+                    val movies = MovieEntity(response.id,
+                        response.title,
+                        response.overview,
+                        response.posterPath,
+                        false)
+                    movieList.add(movies)
+                }
 
-            override fun onFailure() {
-                print("error to get movies")
+                localDataSource.insertMovies(movieList)
             }
-        })
-        return movieList
+        }.asLiveData()
     }
 
-    override fun getMovieDetail(movieId: Int): LiveData<MovieItem> {
-        val movieDetail = MutableLiveData<MovieItem>()
-        remoteDataSource.getMovieDetail(movieId, object  : RemoteDataSource.GetMovieDetailCallback {
-            override fun onResponse(movieResponse: MovieItem) {
-                movieDetail.postValue(movieResponse)
+    override fun getMovieDetail(movieId: Int): LiveData<Resource<MovieEntity>> {
+        return object : NetworkBoundResource<MovieEntity, MovieItem>(appExecutors) {
+            public override fun loadFromDB(): LiveData<MovieEntity> =
+                localDataSource.getMoviesById(movieId)
+            override fun shouldFetch(data: MovieEntity?): Boolean =
+                data == null
+            public override fun createCall(): LiveData<ApiResponse<MovieItem>> =
+                remoteDataSource.getMovieDetail(movieId)
+            public override fun saveCallResult(data: MovieItem) {
+                val moviesDetail = MovieEntity(
+                    data.id,
+                    data.title,
+                    data.overview,
+                    data.posterPath,
+                    false
+                )
+                localDataSource.insertMoviesDetail(moviesDetail)
             }
+        }.asLiveData()
+    }
 
-            override fun onFailure() {
-                print("error to get movies")
+    override fun getSeries(): LiveData<Resource<PagedList<SeriesEntity>>> {
+        return object : NetworkBoundResource<PagedList<SeriesEntity>, List<SeriesItem>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<SeriesEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(4)
+                    .setPageSize(4)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getAllSeries(), config).build()
             }
+            override fun shouldFetch(data: PagedList<SeriesEntity>?): Boolean =
+                data == null || data.isEmpty()
+            public override fun createCall(): LiveData<ApiResponse<List<SeriesItem>>> =
+                remoteDataSource.getSeries()
+            public override fun saveCallResult(data: List<SeriesItem>) {
+                val seriesList = ArrayList<SeriesEntity>()
+                for (response in data) {
+                    val series = SeriesEntity(response.id,
+                        response.name,
+                        response.overview,
+                        response.posterPath,
+                        false)
+                    seriesList.add(series)
+                }
 
-        })
-        return movieDetail
+                localDataSource.insertSeries(seriesList)
+            }
+        }.asLiveData()
+    }
+
+    override fun getSeriesDetail(seriesId: Int): LiveData<Resource<SeriesEntity>> {
+        return object : NetworkBoundResource<SeriesEntity, SeriesItem>(appExecutors) {
+            public override fun loadFromDB(): LiveData<SeriesEntity> =
+                localDataSource.getSeriesById(seriesId)
+            override fun shouldFetch(data: SeriesEntity?): Boolean =
+                data == null
+            public override fun createCall(): LiveData<ApiResponse<SeriesItem>> =
+                remoteDataSource.getSeriesDetail(seriesId)
+            public override fun saveCallResult(data: SeriesItem) {
+                val seriesDetail = SeriesEntity(
+                    data.id,
+                    data.name,
+                    data.overview,
+                    data.posterPath,
+                    false
+                )
+                localDataSource.insertSeriesDetail(seriesDetail)
+            }
+        }.asLiveData()
+    }
+
+    override fun getBookmarkedMovies(): LiveData<PagedList<MovieEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(4)
+            .setPageSize(4)
+            .build()
+        return LivePagedListBuilder(localDataSource.getBookmarkedMovies(), config).build()
     }
 
 
-    override fun getSeries(): LiveData<List<SeriesItem>> {
-        val seriesList = MutableLiveData<List<SeriesItem>>()
+    override fun setMoviesBookmark(movies: MovieEntity, state: Boolean) =
+        appExecutors.diskIO().execute { localDataSource.setMoviesBookmark(movies, state) }
 
-        remoteDataSource.getSeries(object : RemoteDataSource.GetSeriesCallback {
-            override fun onResponse(seriesResponse: List<SeriesItem>) {
-                seriesList.postValue(seriesResponse)
-            }
 
-            override fun onFailure() {
-                print("error to get series")
-            }
-
-        })
-        return  seriesList
+    override fun getBookmarkedSeries(): LiveData<PagedList<SeriesEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(4)
+            .setPageSize(4)
+            .build()
+        return LivePagedListBuilder(localDataSource.getBookmarkedSeries(), config).build()
     }
 
-    override fun getSeriesDetail(seriesId: Int): LiveData<SeriesItem> {
-        val seriesDetail = MutableLiveData<SeriesItem>()
-        remoteDataSource.getSeriesDetail(seriesId, object  : RemoteDataSource.GetSeriesDetailCallback {
-            override fun onResponse(seriesResponse: SeriesItem) {
-                seriesDetail.postValue(seriesResponse)
-            }
 
-            override fun onFailure() {
-                print("error to get series")
-            }
-
-        })
-        return seriesDetail
-    }
+    override fun setSeriesBookmark(series: SeriesEntity, state: Boolean) =
+        appExecutors.diskIO().execute { localDataSource.setSeriesBookmark(series, state) }
 
 }

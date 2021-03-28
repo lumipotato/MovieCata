@@ -11,11 +11,9 @@ import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.databinding.MovieItemsBinding
-import java.util.ArrayList
 
 class MovieAdapter : PagedListAdapter<MovieEntity, MovieAdapter.MovieViewHolder>(DIFF_CALLBACK) {
     private var onItemClickCallback: OnItemClickCallback? = null
-    private var listMovies = ArrayList<MovieEntity>()
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
@@ -39,10 +37,11 @@ class MovieAdapter : PagedListAdapter<MovieEntity, MovieAdapter.MovieViewHolder>
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(listMovies[position])
+        val series = getItem(position)
+        if (series != null) {
+            holder.bind(series)
+        }
     }
-
-    override fun getItemCount(): Int = listMovies.size
 
     fun getSwipedData(swipedPosition: Int): MovieEntity? = getItem(swipedPosition)
 

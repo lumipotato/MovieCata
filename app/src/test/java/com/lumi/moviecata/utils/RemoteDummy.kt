@@ -1,4 +1,4 @@
-package com.lumi.moviecata.viewmodel
+package com.lumi.moviecata.utils
 
 import com.lumi.moviecata.data.source.remote.response.MovieItem
 import com.lumi.moviecata.data.source.remote.response.SeriesItem

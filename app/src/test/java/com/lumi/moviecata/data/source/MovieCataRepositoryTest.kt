@@ -1,9 +1,12 @@
 package com.lumi.moviecata.data.source
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.paging.DataSource
+import com.lumi.moviecata.data.source.local.LocalDataSource
+import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.data.source.remote.response.RemoteDataSource
-import com.lumi.moviecata.utils.LiveDataTestUtil
-import com.lumi.moviecata.viewmodel.RemoteDummy
+import com.lumi.moviecata.utils.*
+import com.lumi.moviecata.vo.Resource
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
@@ -11,8 +14,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.doAnswer
-import org.mockito.Mockito.mock
+import org.mockito.Mockito
+import org.mockito.Mockito.*
 
 
 class MovieCataRepositoryTest {
@@ -22,7 +25,9 @@ class MovieCataRepositoryTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val remote = mock(RemoteDataSource::class.java)
-    private val repository = FakeMovieCataRepository(remote)
+    private val local = mock(LocalDataSource::class.java)
+    private val appExecutors = mock(AppExecutors::class.java)
+    private val repository = FakeMovieCataRepository(remote, local, appExecutors)
 
     private val dummyMovie = RemoteDummy.getMovie()
     private val movieId = dummyMovie[0].id
@@ -30,16 +35,16 @@ class MovieCataRepositoryTest {
     private val seriesId = dummySeries[0].id
 
     @Test
+    @Suppress("UNCHECKED_CAST")
     fun getMovies() {
-        doAnswer { invocation ->
-            (invocation.arguments[0] as RemoteDataSource.GetMovieCallback)
-                    .onResponse(dummyMovie)
-            null
-        }.`when`(remote).getMovie(any())
-        val movieEntities = LiveDataTestUtil.getValue(repository.getMovie())
-        verify(remote).getMovie(any())
-        assertNotNull(movieEntities)
-        assertEquals(dummyMovie.size.toLong(), movieEntities.size.toLong())
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieEntity>
+        `when`(local.getAllMovies()).thenReturn(dataSourceFactory)
+        repository.getMovie()
+
+        val courseEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.generateDummyMovies()))
+        verify(local).getAllMovies()
+        assertNotNull(courseEntities.data)
+        assertEquals(dummyMovie.size.toLong(), courseEntities.data?.size?.toLong())
     }
 
     @Test

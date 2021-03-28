@@ -15,7 +15,6 @@ import java.util.*
 
 class SeriesAdapter : PagedListAdapter<SeriesEntity, SeriesAdapter.SeriesViewHolder>(DIFF_CALLBACK) {
     private var onItemClickCallback: OnItemClickCallback? = null
-    private var listSeries = ArrayList<SeriesEntity>()
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
@@ -39,10 +38,11 @@ class SeriesAdapter : PagedListAdapter<SeriesEntity, SeriesAdapter.SeriesViewHol
     }
 
     override fun onBindViewHolder(holder: SeriesViewHolder, position: Int) {
-        holder.bind(listSeries[position])
+        val series = getItem(position)
+        if (series != null) {
+            holder.bind(series)
+        }
     }
-
-    override fun getItemCount(): Int = listSeries.size
 
     fun getSwipedData(swipedPosition: Int): SeriesEntity? = getItem(swipedPosition)
 
