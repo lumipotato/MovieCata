@@ -13,11 +13,11 @@
         android:theme="@style/Theme.MovieCata">
         <activity android:name=".ui.favorite.FavoriteActivity" />
         <activity
-            android:name=".ui.detail.DetailSeriesActivity"
+            android:name=".ui.detail.seriesdetail.DetailSeriesActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             />
         <activity
-            android:name=".ui.detail.DetailMovieActivity"
+            android:name=".ui.detail.moviedetail.DetailMovieActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             />
         <activity android:name=".ui.home.HomeActivity" />

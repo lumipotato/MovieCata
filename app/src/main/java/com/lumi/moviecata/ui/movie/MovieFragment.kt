@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.databinding.FragmentMovieBinding
-import com.lumi.moviecata.ui.detail.DetailMovieActivity
+import com.lumi.moviecata.ui.detail.moviedetail.DetailMovieActivity
 import com.lumi.moviecata.viewmodel.ViewModelFactory
 import com.lumi.moviecata.vo.Status
 

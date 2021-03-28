@@ -1,4 +1,4 @@
-package com.lumi.moviecata.ui.detail
+package com.lumi.moviecata.ui.detail.seriesdetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

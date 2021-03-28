@@ -10,8 +10,12 @@ class LocalDataSource private constructor(private val mCataDao: CataDao) {
     companion object {
         private var INSTANCE: LocalDataSource? = null
 
-        fun getInstance(cataDao: CataDao): LocalDataSource =
-            INSTANCE ?: LocalDataSource(cataDao)
+        fun getInstance(cataDao: CataDao): LocalDataSource {
+            if (INSTANCE == null) {
+                INSTANCE = LocalDataSource(cataDao)
+            }
+            return INSTANCE as LocalDataSource
+        }
     }
 
     fun getAllMovies(): LiveData<List<MovieEntity>> = mCataDao.getMovies()

@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.lumi.moviecata.R
+import com.lumi.moviecata.ui.favorite.moviefavorite.FavoriteMovieFragment
+import com.lumi.moviecata.ui.favorite.seriesfavorite.FavoriteSeriesFragment
 
 class FavoritePagerAdapter (private val mContext: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 

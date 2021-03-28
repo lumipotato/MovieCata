@@ -1,11 +1,11 @@
-package com.lumi.moviecata.ui.detail
+package com.lumi.moviecata.ui.detail.moviedetail
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -13,42 +13,42 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
-import com.lumi.moviecata.data.source.local.entity.SeriesEntity
+import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.databinding.ActivityDetailShowsBinding
 import com.lumi.moviecata.databinding.ContentDetailShowsBinding
 import com.lumi.moviecata.viewmodel.ViewModelFactory
 import com.lumi.moviecata.vo.Resource
 import com.lumi.moviecata.vo.Status
 
-class DetailSeriesActivity : AppCompatActivity() {
+class DetailMovieActivity : AppCompatActivity() {
 
     companion object {
-        const val EXTRA_SERIES = "extra_series"
+        const val EXTRA_MOVIE = "extra_movie"
     }
 
     private lateinit var detailContentBinding: ContentDetailShowsBinding
-    private lateinit var seriesViewModel: DetailSeriesViewModel
+    private lateinit var movieViewModel: DetailMovieViewModel
     private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val showsBinding = ActivityDetailShowsBinding.inflate(layoutInflater)
-        detailContentBinding = showsBinding.detailContent
+        val activityDetailShowsBinding = ActivityDetailShowsBinding.inflate(layoutInflater)
+        detailContentBinding = activityDetailShowsBinding.detailContent
 
-        setContentView(showsBinding.root)
+        setContentView(activityDetailShowsBinding.root)
 
         val factory = ViewModelFactory.getInstance(applicationContext)
-        seriesViewModel = ViewModelProvider(this, factory)[DetailSeriesViewModel::class.java]
+        movieViewModel = ViewModelProvider(this, factory)[DetailMovieViewModel::class.java]
 
         showLoading(true)
 
         val extras = intent.extras
-        val seriesId = extras?.getInt(EXTRA_SERIES)
-        if (seriesId != null) {
-            seriesViewModel.setSelectedSeries(seriesId)
-            seriesViewModel.mSeries.observe(this) { detail ->
+        val movieId = extras?.getInt(EXTRA_MOVIE)
+        if (movieId != null) {
+            movieViewModel.setSelectedMovie(movieId)
+            movieViewModel.mMovie.observe(this) { detail ->
                 if (detail != null) {
-                    populateSeries(detail)
+                    populateMovie(detail)
                     showLoading(false)
                     detailContentBinding.imagePoster.visibility = View.VISIBLE
                     detailContentBinding.textDesc.visibility = View.VISIBLE
@@ -57,12 +57,12 @@ class DetailSeriesActivity : AppCompatActivity() {
         }
 
     }
-    private fun populateSeries(seriesItem: Resource<SeriesEntity>) {
-        detailContentBinding.textTitle.text = seriesItem.data?.title
-        detailContentBinding.textDescription.text = seriesItem.data?.description
+    private fun populateMovie(movieItem: Resource<MovieEntity>) {
+        detailContentBinding.textTitle.text = movieItem.data?.title
+        detailContentBinding.textDescription.text = movieItem.data?.description
 
         Glide.with(this)
-                .load("${BuildConfig.IMG_URL}${seriesItem.data?.imagePath}")
+                .load("${BuildConfig.IMG_URL}${movieItem.data?.imagePath}")
                 .transform(RoundedCorners(20))
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading)
                         .error(R.drawable.ic_error))
@@ -72,13 +72,13 @@ class DetailSeriesActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
         this.menu = menu
-        seriesViewModel.mSeries.observe(this, { series ->
-            if (series != null) {
-                when (series.status) {
+        movieViewModel.mMovie.observe(this, { movie ->
+            if (movie != null) {
+                when (movie.status) {
                     Status.LOADING -> detailContentBinding.progressBar.visibility = View.VISIBLE
-                    Status.SUCCESS -> if (series.data != null) {
+                    Status.SUCCESS -> if (movie.data != null) {
                         detailContentBinding.progressBar.visibility = View.GONE
-                        val state = series.data.bookmarked
+                        val state = movie.data.bookmarked
                         setBookmarkState(state)
                     }
                     Status.ERROR -> {
@@ -93,7 +93,7 @@ class DetailSeriesActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_fav) {
-            seriesViewModel.setBookmark()
+            movieViewModel.setBookmark()
             return true
         }
         return super.onOptionsItemSelected(item)
