@@ -1,5 +1,6 @@
 package com.lumi.moviecata.ui.detail.moviedetail
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -56,6 +57,7 @@ class DetailMovieActivity : AppCompatActivity() {
             }
         }
 
+        supportActionBar?.title = getString(R.string.detail)
     }
     private fun populateMovie(movieItem: Resource<MovieEntity>) {
         detailContentBinding.textTitle.text = movieItem.data?.title
@@ -92,11 +94,18 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_fav) {
-            movieViewModel.setBookmark()
-            return true
+        return when (item.itemId) {
+            R.id.action_fav -> {
+                movieViewModel.setBookmark()
+                true
+            }
+
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> true
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setBookmarkState(state: Boolean) {

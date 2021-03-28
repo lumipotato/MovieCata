@@ -56,6 +56,8 @@ class DetailSeriesActivity : AppCompatActivity() {
             }
         }
 
+        supportActionBar?.title = getString(R.string.detail2)
+
     }
     private fun populateSeries(seriesItem: Resource<SeriesEntity>) {
         detailContentBinding.textTitle.text = seriesItem.data?.title
@@ -92,11 +94,18 @@ class DetailSeriesActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_fav) {
-            seriesViewModel.setBookmark()
-            return true
+        return when (item.itemId) {
+            R.id.action_fav -> {
+                seriesViewModel.setBookmark()
+                true
+            }
+
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> true
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setBookmarkState(state: Boolean) {

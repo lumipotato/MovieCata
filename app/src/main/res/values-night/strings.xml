@@ -13,4 +13,6 @@
     <string name="menu_detail">Detail Menu</string>
     <string name="fav_empty">Empty List, please like at least 1 Movie</string>
     <string name="fav2_empty">Empty List, please like at least 1 Tv Show</string>
+    <string name="detail">Detail</string>
+    <string name="detail2">Detail Series</string>
 </resources>
