@@ -10,9 +10,12 @@ import com.lumi.moviecata.vo.Resource
 
 class DetailMovieViewModel (private val movieCataRepository: MovieCataRepository) : ViewModel(){
 
-    fun getMovieDetail(movieId: Int) : LiveData<Resource<MovieEntity>> = movieCataRepository.getMovieDetail(movieId)
-
     private val movieId = MutableLiveData<Int>()
+
+    fun setSelectedMovie(movieId: Int) {
+        this.movieId.value = movieId
+    }
+
     var mMovie: LiveData<Resource<MovieEntity>> =
             Transformations.switchMap(movieId) { mMovieId ->
                 movieCataRepository.getMovieDetail(mMovieId)

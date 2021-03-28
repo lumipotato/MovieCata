@@ -45,7 +45,8 @@ class DetailMovieActivity : AppCompatActivity() {
         val extras = intent.extras
         val movieId = extras?.getInt(EXTRA_MOVIE)
         if (movieId != null) {
-            movieViewModel.getMovieDetail(movieId).observe(this) { detail ->
+            movieViewModel.setSelectedMovie(movieId)
+            movieViewModel.mMovie.observe(this) { detail ->
                 if (detail != null) {
                     populateMovie(detail)
                     showLoading(false)
