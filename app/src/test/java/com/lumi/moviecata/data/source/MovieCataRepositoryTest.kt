@@ -75,7 +75,7 @@ class MovieCataRepositoryTest {
         repository.getSeries()
 
         val seriesEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.generateDummySeries()))
-        verify(local).getAllMovies()
+        verify(local).getAllSeries()
         assertNotNull(seriesEntities.data)
         assertEquals(dummyMovie.size.toLong(), seriesEntities.data?.size?.toLong())
     }
@@ -93,8 +93,8 @@ class MovieCataRepositoryTest {
         assertNotNull(seriesEntitiesDetail)
         assertNotNull(seriesEntitiesDetail.data?.title)
         assertNotNull(seriesEntitiesDetail.data?.description)
-        assertEquals(dummyMovie[0].title, seriesEntitiesDetail.data?.title)
-        assertEquals(dummyMovie[0].description, seriesEntitiesDetail.data?.description)
+        assertEquals(dummySeries[0].title, seriesEntitiesDetail.data?.title)
+        assertEquals(dummySeries[0].description, seriesEntitiesDetail.data?.description)
     }
 
     @Test

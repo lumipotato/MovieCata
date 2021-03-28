@@ -7,14 +7,13 @@ import com.lumi.moviecata.data.source.MovieCataRepository
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.utils.DataDummy
 import com.lumi.moviecata.vo.Resource
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -36,24 +35,22 @@ class DetailMovieViewModelTest {
     fun setUp() {
         viewModel = DetailMovieViewModel(repository)
         viewModel.setSelectedMovie(movieId)
+
     }
 
     @Test
     fun getMovieDetail() {
-        val dummies = Resource.success(dummy)
-        val movie = MutableLiveData<Resource<MovieEntity>>()
-        movie.value = dummies
+        val resource: Resource<MovieEntity> = Resource.success(dummy)
 
-        `when`(repository.getMovieDetail(movieId)).thenReturn(movie)
-        val detailEntities = viewModel.mMovie
-        verify(repository).getMovieDetail(movieId)
+        val movieEntities = MutableLiveData<Resource<MovieEntity>>().also {
+            it.setValue(resource)
+        }
 
-        assertNotNull(detailEntities)
-        assertEquals(dummy.title, detailEntities.value?.data?.title)
-        assertEquals(dummy.description, detailEntities.value?.data?.title)
+        `when`(repository.getMovieDetail(movieId)).thenReturn(movieEntities)
 
+        viewModel.setSelectedMovie(movieId)
         viewModel.mMovie.observeForever(observer)
 
-        verify(observer).onChanged(dummies)
+        verify(observer).onChanged(resource)
     }
 }

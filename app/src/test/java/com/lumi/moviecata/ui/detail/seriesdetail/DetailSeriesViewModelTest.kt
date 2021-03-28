@@ -7,7 +7,6 @@ import com.lumi.moviecata.data.source.MovieCataRepository
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.utils.DataDummy
 import com.lumi.moviecata.vo.Resource
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,9 +31,6 @@ class DetailSeriesViewModelTest {
     @Mock
     private lateinit var observer: Observer<Resource<SeriesEntity>>
 
-    @Mock
-    private lateinit var entity: SeriesEntity
-
     @Before
     fun setUp() {
         viewModel = DetailSeriesViewModel(repository)
@@ -43,20 +39,17 @@ class DetailSeriesViewModelTest {
 
     @Test
     fun getSeriesDetail() {
-        val dummies = Resource.success(entity)
-        val series = MutableLiveData<Resource<SeriesEntity>>()
-        series.value = dummies
+        val resource: Resource<SeriesEntity> = Resource.success(dummy)
 
-        `when`(repository.getSeriesDetail(seriesId)).thenReturn(series)
-        val detailEntities = viewModel.mSeries
-        verify(repository).getSeriesDetail(seriesId)
+        val seriesEntities = MutableLiveData<Resource<SeriesEntity>>().also {
+            it.setValue(resource)
+        }
 
-        Assert.assertNotNull(detailEntities)
-        Assert.assertEquals(dummy.title, detailEntities.value?.data?.title)
-        Assert.assertEquals(dummy.description, detailEntities.value?.data?.title)
+        `when`(repository.getSeriesDetail(seriesId)).thenReturn(seriesEntities)
 
+        viewModel.setSelectedSeries(seriesId)
         viewModel.mSeries.observeForever(observer)
 
-        verify(observer).onChanged(dummies)
+        verify(observer).onChanged(resource)
     }
 }
