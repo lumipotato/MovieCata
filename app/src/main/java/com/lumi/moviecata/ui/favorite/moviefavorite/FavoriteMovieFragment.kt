@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.lumi.moviecata.R
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.databinding.FragmentMovieBinding
 import com.lumi.moviecata.ui.detail.moviedetail.DetailMovieActivity
@@ -17,6 +21,7 @@ import com.lumi.moviecata.viewmodel.ViewModelFactory
 class FavoriteMovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
     private lateinit var adapter: MovieAdapter
+    private lateinit var viewModel: FavoriteMovieViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -26,6 +31,7 @@ class FavoriteMovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        itemTouchHelper.attachToRecyclerView(fragmentMovieBinding.rvMovie)
 
         fragmentMovieBinding.rvMovie.setHasFixedSize(true)
         adapter = MovieAdapter()
@@ -49,7 +55,7 @@ class FavoriteMovieFragment : Fragment() {
             showLoading(true)
             viewModel.getFavMovie().observe(this, { movies ->
                 if (movies != null) {
-                    adapter.setMovies(movies)
+                    adapter.submitList(movies)
                     showLoading(false)
                     adapter.notifyDataSetChanged()
                 }
@@ -71,4 +77,25 @@ class FavoriteMovieFragment : Fragment() {
             fragmentMovieBinding.progressBar.visibility = View.INVISIBLE
         }
     }
+
+    private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int =
+            makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = true
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            if (view != null) {
+                val swipedPosition = viewHolder.adapterPosition
+                val courseEntity = adapter.getSwipedData(swipedPosition)
+                courseEntity?.let { viewModel.setBookmark(it) }
+
+                val snackbar = Snackbar.make(view as View, R.string.message_undo, Snackbar.LENGTH_LONG)
+                snackbar.setAction(R.string.message_ok) { _ ->
+                    courseEntity?.let { viewModel.setBookmark(it) }
+                }
+                snackbar.show()
+            }
+        }
+    })
 }

@@ -1,6 +1,8 @@
 package com.lumi.moviecata.data.source
 
 import androidx.lifecycle.LiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.lumi.moviecata.data.NetworkBoundResource
 import com.lumi.moviecata.data.source.local.LocalDataSource
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
@@ -25,11 +27,17 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
             }
     }
 
-    override fun getMovie(): LiveData<Resource<List<MovieEntity>>> {
-        return object : NetworkBoundResource<List<MovieEntity>, List<MovieItem>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<MovieEntity>> =
-                    localDataSource.getAllMovies()
-            override fun shouldFetch(data: List<MovieEntity>?): Boolean =
+    override fun getMovie(): LiveData<Resource<PagedList<MovieEntity>>> {
+        return object : NetworkBoundResource<PagedList<MovieEntity>, List<MovieItem>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<MovieEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(4)
+                    .setPageSize(4)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getAllMovies(), config).build()
+            }
+            override fun shouldFetch(data: PagedList<MovieEntity>?): Boolean =
                     data == null || data.isEmpty()
             public override fun createCall(): LiveData<ApiResponse<List<MovieItem>>> =
                     remoteDataSource.getMovie()
@@ -70,11 +78,17 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
         }.asLiveData()
     }
 
-    override fun getSeries(): LiveData<Resource<List<SeriesEntity>>> {
-        return object : NetworkBoundResource<List<SeriesEntity>, List<SeriesItem>>(appExecutors) {
-            public override fun loadFromDB(): LiveData<List<SeriesEntity>> =
-                    localDataSource.getAllSeries()
-            override fun shouldFetch(data: List<SeriesEntity>?): Boolean =
+    override fun getSeries(): LiveData<Resource<PagedList<SeriesEntity>>> {
+        return object : NetworkBoundResource<PagedList<SeriesEntity>, List<SeriesItem>>(appExecutors) {
+            public override fun loadFromDB(): LiveData<PagedList<SeriesEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(4)
+                    .setPageSize(4)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getAllSeries(), config).build()
+            }
+            override fun shouldFetch(data: PagedList<SeriesEntity>?): Boolean =
                     data == null || data.isEmpty()
             public override fun createCall(): LiveData<ApiResponse<List<SeriesItem>>> =
                     remoteDataSource.getSeries()
@@ -115,16 +129,28 @@ class MovieCataRepository private constructor(private val remoteDataSource: Remo
         }.asLiveData()
     }
 
-    override fun getBookmarkedMovies(): LiveData<List<MovieEntity>> =
-        localDataSource.getBookmarkedMovies()
+    override fun getBookmarkedMovies(): LiveData<PagedList<MovieEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(4)
+            .setPageSize(4)
+            .build()
+        return LivePagedListBuilder(localDataSource.getBookmarkedMovies(), config).build()
+    }
 
 
     override fun setMoviesBookmark(movies: MovieEntity, state: Boolean) =
         appExecutors.diskIO().execute { localDataSource.setMoviesBookmark(movies, state) }
 
 
-    override fun getBookmarkedSeries(): LiveData<List<SeriesEntity>> =
-        localDataSource.getBookmarkedSeries()
+    override fun getBookmarkedSeries(): LiveData<PagedList<SeriesEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(4)
+            .setPageSize(4)
+            .build()
+        return LivePagedListBuilder(localDataSource.getBookmarkedSeries(), config).build()
+    }
 
 
     override fun setSeriesBookmark(series: SeriesEntity, state: Boolean) =

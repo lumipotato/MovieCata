@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "seriesentities")
-class SeriesEntity (
+data class SeriesEntity (
         @PrimaryKey
         @NonNull
         @ColumnInfo(name = "id")

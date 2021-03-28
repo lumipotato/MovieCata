@@ -1,6 +1,7 @@
 package com.lumi.moviecata.data.source.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.data.source.local.room.CataDao
@@ -18,9 +19,9 @@ class LocalDataSource private constructor(private val mCataDao: CataDao) {
         }
     }
 
-    fun getAllMovies(): LiveData<List<MovieEntity>> = mCataDao.getMovies()
+    fun getAllMovies(): DataSource.Factory<Int, MovieEntity> = mCataDao.getMovies()
 
-    fun getAllSeries(): LiveData<List<SeriesEntity>> = mCataDao.getSeries()
+    fun getAllSeries(): DataSource.Factory<Int, SeriesEntity> = mCataDao.getSeries()
 
     fun getMoviesById(movieId: Int): LiveData<MovieEntity> = mCataDao.getMoviesById(movieId)
 
@@ -34,9 +35,9 @@ class LocalDataSource private constructor(private val mCataDao: CataDao) {
 
     fun insertSeriesDetail(series: SeriesEntity) = mCataDao.insertSeriesDetail(series)
 
-    fun getBookmarkedMovies(): LiveData<List<MovieEntity>> = mCataDao.getBookmarkedMovies()
+    fun getBookmarkedMovies(): DataSource.Factory<Int, MovieEntity> = mCataDao.getBookmarkedMovies()
 
-    fun getBookmarkedSeries(): LiveData<List<SeriesEntity>> = mCataDao.getBookmarkedSeries()
+    fun getBookmarkedSeries(): DataSource.Factory<Int, SeriesEntity> = mCataDao.getBookmarkedSeries()
 
     fun setMoviesBookmark(movies: MovieEntity, newState: Boolean) {
         movies.bookmarked = newState

@@ -15,4 +15,6 @@
     <string name="fav2_empty">Empty List, please like at least 1 Tv Show</string>
     <string name="detail">Detail</string>
     <string name="detail2">Detail Series</string>
+    <string name="message_ok">Yes</string>
+    <string name="message_undo">Undo Remove?</string>
 </resources>

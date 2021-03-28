@@ -1,6 +1,7 @@
 package com.lumi.moviecata.data.source.local.room
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import com.lumi.moviecata.data.source.local.entity.MovieEntity
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
@@ -10,10 +11,10 @@ import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 interface CataDao {
 
     @Query("SELECT * FROM movieentities")
-    fun getMovies(): LiveData<List<MovieEntity>>
+    fun getMovies(): DataSource.Factory<Int, MovieEntity>
 
     @Query("SELECT * FROM seriesentities")
-    fun getSeries(): LiveData<List<SeriesEntity>>
+    fun getSeries(): DataSource.Factory<Int, SeriesEntity>
 
     @Query("SELECT * FROM movieentities WHERE id = :movieId")
     fun getMoviesById(movieId: Int): LiveData<MovieEntity>
@@ -34,10 +35,10 @@ interface CataDao {
     fun insertSeriesDetail(series: SeriesEntity)
 
     @Query("SELECT * FROM movieentities where bookmarked = 1")
-    fun getBookmarkedMovies(): LiveData<List<MovieEntity>>
+    fun getBookmarkedMovies(): DataSource.Factory<Int, MovieEntity>
 
     @Query("SELECT * FROM seriesentities where bookmarked = 1")
-    fun getBookmarkedSeries(): LiveData<List<SeriesEntity>>
+    fun getBookmarkedSeries(): DataSource.Factory<Int, SeriesEntity>
 
     @Update
     fun updateMovies(movies: MovieEntity)

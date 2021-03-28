@@ -2,6 +2,8 @@ package com.lumi.moviecata.ui.series
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -9,9 +11,9 @@ import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.databinding.MovieItemsBinding
-import java.util.ArrayList
+import java.util.*
 
-class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
+class SeriesAdapter : PagedListAdapter<SeriesEntity, SeriesAdapter.SeriesViewHolder>(DIFF_CALLBACK) {
     private var onItemClickCallback: OnItemClickCallback? = null
     private var listSeries = ArrayList<SeriesEntity>()
 
@@ -19,10 +21,16 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setSeries(series: List<SeriesEntity>?) {
-        if (series == null) return
-        this.listSeries.clear()
-        this.listSeries.addAll(series)
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SeriesEntity>() {
+            override fun areItemsTheSame(oldItem: SeriesEntity, newItem: SeriesEntity): Boolean {
+                return oldItem.tvId == newItem.tvId
+            }
+
+            override fun areContentsTheSame(oldItem: SeriesEntity, newItem: SeriesEntity): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriesViewHolder {
@@ -35,6 +43,8 @@ class SeriesAdapter : RecyclerView.Adapter<SeriesAdapter.SeriesViewHolder>() {
     }
 
     override fun getItemCount(): Int = listSeries.size
+
+    fun getSwipedData(swipedPosition: Int): SeriesEntity? = getItem(swipedPosition)
 
     inner class SeriesViewHolder(private val binding: MovieItemsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(series: SeriesEntity) {

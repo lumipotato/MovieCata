@@ -53,7 +53,7 @@ class SeriesFragment : Fragment() {
                         Status.LOADING -> fragmentSeriesBinding.progressBar.visibility = View.VISIBLE
                         Status.SUCCESS -> {
                             fragmentSeriesBinding.progressBar.visibility = View.GONE
-                            adapter.setSeries(series.data)
+                            adapter.submitList(series.data)
                             adapter.notifyDataSetChanged()
                         }
                         Status.ERROR -> {
