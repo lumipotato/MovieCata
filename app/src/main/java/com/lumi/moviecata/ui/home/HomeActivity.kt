@@ -1,10 +1,10 @@
 package com.lumi.moviecata.ui.home
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.lumi.moviecata.R
 import com.lumi.moviecata.databinding.ActivityHomeBinding
 import com.lumi.moviecata.ui.favorite.FavoriteActivity

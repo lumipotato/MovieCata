@@ -1,6 +1,9 @@
 package com.lumi.moviecata.data.source.remote.retrofit
 
-import com.lumi.moviecata.data.source.remote.response.*
+import com.lumi.moviecata.data.source.remote.response.MovieItem
+import com.lumi.moviecata.data.source.remote.response.MovieResponse
+import com.lumi.moviecata.data.source.remote.response.SeriesItem
+import com.lumi.moviecata.data.source.remote.response.SeriesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

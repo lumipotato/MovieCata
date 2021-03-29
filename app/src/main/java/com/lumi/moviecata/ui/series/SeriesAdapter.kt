@@ -11,7 +11,6 @@ import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.R
 import com.lumi.moviecata.data.source.local.entity.SeriesEntity
 import com.lumi.moviecata.databinding.MovieItemsBinding
-import java.util.*
 
 class SeriesAdapter : PagedListAdapter<SeriesEntity, SeriesAdapter.SeriesViewHolder>(DIFF_CALLBACK) {
     private var onItemClickCallback: OnItemClickCallback? = null

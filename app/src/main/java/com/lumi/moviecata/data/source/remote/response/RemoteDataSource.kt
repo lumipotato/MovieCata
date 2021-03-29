@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.lumi.moviecata.BuildConfig
 import com.lumi.moviecata.data.source.remote.ApiResponse
-import com.lumi.moviecata.utils.espresso.EspressoIdlingResource
 import com.lumi.moviecata.data.source.remote.retrofit.ApiConfig
+import com.lumi.moviecata.utils.espresso.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

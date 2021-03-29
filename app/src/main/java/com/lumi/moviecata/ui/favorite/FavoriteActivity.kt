@@ -1,8 +1,8 @@
 package com.lumi.moviecata.ui.favorite
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.lumi.moviecata.R
 import com.lumi.moviecata.databinding.ActivityFavoriteBinding
 
