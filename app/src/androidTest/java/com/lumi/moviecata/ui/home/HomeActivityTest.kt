@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -76,6 +77,42 @@ class HomeActivityTest {
         onView(withId(R.id.text_title)).check(matches(withText(dummySeries[0].title)))
         onView(withId(R.id.text_description)).check(matches(isDisplayed()))
         onView(withId(R.id.text_description)).check(matches(withText(dummySeries[0].description)))
+    }
+
+    @Test
+    fun loadAsMoviesFav() {
+        onView(withId(R.id.rv_movie)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.action_fav)).perform(click())
+        onView(isRoot()).perform(ViewActions.pressBack())
+        onView(withId(R.id.menu)).perform(click())
+        onView(withId(R.id.rv_movie)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_movie)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.image_poster)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_title)).check(matches(withText(dummyMovie[0].title)))
+        onView(withId(R.id.text_description)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_description)).check(matches(withText(dummyMovie[0].description)))
+        onView(withId(R.id.action_fav)).perform(click())
+        onView(isRoot()).perform(ViewActions.pressBack())
+    }
+
+    @Test
+    fun loadAsSeriesFav() {
+        onView(withText("Series")).perform(click())
+        onView(withId(R.id.rv_series)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.action_fav)).perform(click())
+        onView(isRoot()).perform(ViewActions.pressBack())
+        onView(withId(R.id.menu)).perform(click())
+        onView(withText("Favorite Series")).perform(click())
+        onView(withId(R.id.rv_series)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_series)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.image_poster)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_title)).check(matches(withText(dummySeries[0].title)))
+        onView(withId(R.id.text_description)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_description)).check(matches(withText(dummySeries[0].description)))
+        onView(withId(R.id.action_fav)).perform(click())
+        onView(isRoot()).perform(ViewActions.pressBack())
     }
 
 }
