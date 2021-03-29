@@ -12,8 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -40,10 +39,8 @@ class DetailSeriesViewModelTest {
     @Test
     fun getSeriesDetail() {
         val resource: Resource<SeriesEntity> = Resource.success(dummy)
-
-        val seriesEntities = MutableLiveData<Resource<SeriesEntity>>().also {
-            it.setValue(resource)
-        }
+        val seriesEntities = MutableLiveData<Resource<SeriesEntity>>()
+        seriesEntities.value = resource
 
         `when`(repository.getSeriesDetail(seriesId)).thenReturn(seriesEntities)
 
@@ -51,5 +48,19 @@ class DetailSeriesViewModelTest {
         viewModel.mSeries.observeForever(observer)
 
         verify(observer).onChanged(resource)
+    }
+
+    @Test
+    fun favoriteSeries() {
+        val dummySeriesFavorite = Resource.success(dummy)
+        val series = MutableLiveData<Resource<SeriesEntity>>()
+        val newState = !dummy.bookmarked
+        series.value = dummySeriesFavorite
+        `when`(repository.getSeriesDetail(seriesId)).thenReturn(series)
+
+        doNothing().`when`(repository).setSeriesBookmark(dummy, newState)
+        viewModel.mSeries.observeForever(observer)
+        viewModel.setBookmark()
+        verify(repository, times(1)).setSeriesBookmark(dummy, newState)
     }
 }

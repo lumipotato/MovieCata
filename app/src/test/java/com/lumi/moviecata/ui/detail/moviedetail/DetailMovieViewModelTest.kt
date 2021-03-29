@@ -12,8 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -41,10 +40,8 @@ class DetailMovieViewModelTest {
     @Test
     fun getMovieDetail() {
         val resource: Resource<MovieEntity> = Resource.success(dummy)
-
-        val movieEntities = MutableLiveData<Resource<MovieEntity>>().also {
-            it.setValue(resource)
-        }
+        val movieEntities = MutableLiveData<Resource<MovieEntity>>()
+        movieEntities.value = resource
 
         `when`(repository.getMovieDetail(movieId)).thenReturn(movieEntities)
 
@@ -52,5 +49,19 @@ class DetailMovieViewModelTest {
         viewModel.mMovie.observeForever(observer)
 
         verify(observer).onChanged(resource)
+    }
+
+    @Test
+    fun favoriteMovie() {
+        val dummyMovieFavorite = Resource.success(dummy)
+        val movie = MutableLiveData<Resource<MovieEntity>>()
+        val newState = !dummy.bookmarked
+        movie.value = dummyMovieFavorite
+        `when`(repository.getMovieDetail(movieId)).thenReturn(movie)
+
+        doNothing().`when`(repository).setMoviesBookmark(dummy, newState)
+        viewModel.mMovie.observeForever(observer)
+        viewModel.setBookmark()
+        verify(repository, times(1)).setMoviesBookmark(dummy, newState)
     }
 }
